@@ -6,7 +6,7 @@
 *.dylib
 *.png
 *.sess
-storedSession.json
+*.json
 WhatsApp
 WhatsApp-Go
 
