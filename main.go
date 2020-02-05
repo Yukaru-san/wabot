@@ -2,6 +2,10 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
+	"os/exec"
+	"strconv"
 	"time"
 
 	"github.com/Rhymen/go-whatsapp"
@@ -17,7 +21,7 @@ var (
 )
 
 func main() {
-
+	fmt.Println(trans("hey wie gehts dir"))
 	sess, conn = HandleLogin()
 	_ = sess
 
@@ -33,13 +37,29 @@ func main() {
 	}
 }
 
+func trans(in string) string {
+	file := "tmp" + strconv.FormatInt(time.Now().Unix(), 10)
+	err := ioutil.WriteFile(file, []byte(in), 0777)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ""
+	}
+	out, err := exec.Command("trans", ":en", "file://"+file).Output()
+	if err != nil {
+		fmt.Println(err.Error())
+		return ""
+	}
+	os.Remove(file)
+	return (string)(out)
+}
+
 func (cmd) HandleError(err error) {
 	fmt.Println(err.Error())
 }
 
 func (cmd) HandleContactList(contacts []whatsapp.Contact) {
 	for _, c := range contacts {
-		fmt.Println(c.Name)
+		fmt.Println(c.Name, c.Jid)
 		contacList = append(contacts, c)
 	}
 }
