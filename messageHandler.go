@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/Rhymen/go-whatsapp"
 )
 
@@ -13,7 +11,7 @@ func (messageHandler) HandleError(err error) {
 }
 
 func (messageHandler) HandleTextMessage(message whatsapp.TextMessage) {
-	fmt.Println(message)
+	//fmt.Println(message)
 }
 
 func (messageHandler) HandleImageMessage(message whatsapp.ImageMessage) {
