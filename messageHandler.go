@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/Rhymen/go-whatsapp"
@@ -18,9 +19,9 @@ func (messageHandler) HandleError(err error) {
 
 func (messageHandler) HandleTextMessage(message whatsapp.TextMessage) {
 	//	Example reaction
-	if !message.Info.FromMe && message.Info.RemoteJid == "JID" && message.Info.Timestamp > startTime {
+	if message.Info.Timestamp > startTime && strings.HasPrefix(message.Text, "!t") {
 
-		tl, _ := gtranslate.Translate(message.Text, language.German, language.English)
+		tl, _ := gtranslate.Translate(message.Text[2:], language.German, language.English)
 		msg := whatsapp.TextMessage{
 			Info: whatsapp.MessageInfo{
 				RemoteJid: message.Info.RemoteJid,
