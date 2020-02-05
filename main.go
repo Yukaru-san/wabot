@@ -9,11 +9,16 @@ import (
 
 type cmd struct{}
 
-var contacList []whatsapp.Contact
+var (
+	contacList []whatsapp.Contact
+	sess       whatsapp.Session
+	conn       *whatsapp.Conn
+	startTime  = uint64(time.Now().Unix())
+)
 
 func main() {
 
-	sess, conn := HandleLogin()
+	sess, conn = HandleLogin()
 	_ = sess
 
 	// Add a complete MSG Handler

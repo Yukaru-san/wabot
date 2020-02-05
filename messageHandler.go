@@ -13,6 +13,21 @@ func (messageHandler) HandleError(err error) {
 }
 
 func (messageHandler) HandleTextMessage(message whatsapp.TextMessage) {
+
+	/*	Example reaction
+		if !message.Info.FromMe && message.Info.RemoteJid == "__ID__" && message.Info.Timestamp > startTime {
+
+			// Erstelle ne Nachricht
+			msg := whatsapp.TextMessage{
+				Info: whatsapp.MessageInfo{
+					RemoteJid: message.Info.RemoteJid,
+				},
+				Text: "Antwort",
+			}
+			// Und schick sie ab
+			_, err := conn.Send(msg)
+	*/
+
 	//fmt.Println(message)
 	fmt.Printf("%s:\t%s\n", jidToName(message.Info.RemoteJid), message.Text)
 }
