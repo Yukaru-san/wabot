@@ -39,7 +39,7 @@ func HandleLogin() (whatsapp.Session, *whatsapp.Conn) {
 		}
 		// Save new session to quickly start the next time
 		sessionJSON, _ := json.Marshal(sess)
-		err = ioutil.WriteFile("storedSession.sess", sessionJSON, 0644)
+		err = ioutil.WriteFile("storedSession.sess", sessionJSON, 0600)
 		println("Session saved.")
 
 		return sess, wac
