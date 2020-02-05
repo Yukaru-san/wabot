@@ -10,8 +10,8 @@ import (
 	"github.com/skip2/go-qrcode"
 )
 
-// HandleLogin returns a connection and session to the
-//   web. If there is an error, the program will exit
+// HandleLogin returns a connection and session-pointer.
+// If there is an error, the program will exit
 func HandleLogin() (whatsapp.Session, *whatsapp.Conn) {
 
 	// Try to load an old session
