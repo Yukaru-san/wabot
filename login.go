@@ -10,6 +10,8 @@ import (
 	"github.com/skip2/go-qrcode"
 )
 
+// HandleLogin returns a connection and session to the
+//   web. If there is an error, the program will exit
 func HandleLogin() (whatsapp.Session, *whatsapp.Conn) {
 
 	// Try to load an old session
@@ -43,8 +45,8 @@ func HandleLogin() (whatsapp.Session, *whatsapp.Conn) {
 		println("Session saved.")
 
 		return sess, wac
-
 	}
+
 	// Session loaded successfully. Use it to login
 	wac, err := whatsapp.NewConn(20 * time.Second)
 	sess, err := wac.RestoreWithSession(savedSession)

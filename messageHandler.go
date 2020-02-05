@@ -32,7 +32,7 @@ func (messageHandler) HandleAudioMessage(message whatsapp.AudioMessage) {
 	//fmt.Println(message)
 }
 
-func (messageHandler) HandleJsonMessage(message string) {
+func (messageHandler) HandleJSONMessage(message string) {
 	//	fmt.Println(message)
 }
 
