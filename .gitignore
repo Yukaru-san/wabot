@@ -5,6 +5,7 @@
 *.so
 *.dylib
 *.png
+WhatsApp
 
 # Test binary, built with `go test -c`
 *.test
