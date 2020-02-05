@@ -39,7 +39,7 @@ func (cmd) HandleError(err error) {
 
 func (cmd) HandleContactList(contacts []whatsapp.Contact) {
 	for _, c := range contacts {
-		fmt.Println(c.Name)
+		//	fmt.Println(c.Name)
 		contacList = append(contacts, c)
 	}
 }
