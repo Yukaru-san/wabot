@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/Rhymen/go-whatsapp"
+	"github.com/bregydoc/gtranslate"
+	"golang.org/x/text/language"
 )
 
 type messageHandler struct{}
@@ -14,26 +16,16 @@ func (messageHandler) HandleError(err error) {
 	//fmt.Fprintf(os.Stderr, "%v", err)
 }
 
-const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-func randStringBytesRmndr(n int) string {
-	b := make([]byte, n)
-	for i := range b {
-		b[i] = letterBytes[rand.Int63()%int64(len(letterBytes))]
-	}
-	return string(b)
-}
-
 func (messageHandler) HandleTextMessage(message whatsapp.TextMessage) {
 	//	Example reaction
-	if !message.Info.FromMe && message.Info.RemoteJid == "__JID__" && message.Info.Timestamp > startTime {
+	if !message.Info.FromMe && message.Info.RemoteJid == "JID" && message.Info.Timestamp > startTime {
 
-		s := trans(message.Text)
+		tl, _ := gtranslate.Translate(message.Text, language.German, language.English)
 		msg := whatsapp.TextMessage{
 			Info: whatsapp.MessageInfo{
 				RemoteJid: message.Info.RemoteJid,
 			},
-			Text: s,
+			Text: tl,
 		}
 		// Und schick sie ab
 		time.Sleep((time.Duration)(rand.New(rand.NewSource(time.Now().UnixNano())).Int63n(5)) * time.Second)
