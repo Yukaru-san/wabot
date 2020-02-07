@@ -1,11 +1,19 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
+
 	"github.com/Rhymen/go-whatsapp"
 	"golang.org/x/text/language"
 )
 
-var users []BotUser
+var users = BotUserList{}
+
+// BotUserList saves the BotUser-Array - easy to save&load
+type BotUserList struct {
+	BotUsers []BotUser
+}
 
 // BotUser contains the contact and his personal settings
 type BotUser struct {
@@ -30,12 +38,12 @@ func CreateEmptySettings() Settings {
 
 // AddUser adds a new member to the group and prepares a Settings struct for him
 func AddUser(user whatsapp.Contact) {
-	users = append(users, BotUser{user, CreateEmptySettings()})
+	users.BotUsers = append(users.BotUsers, BotUser{user, CreateEmptySettings()})
 }
 
 // IsUserRegistered checks if the given jid exists in the array
 func IsUserRegistered(jid string) bool {
-	for _, u := range users {
+	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
 			return true
 		}
@@ -48,7 +56,7 @@ func AddUserByJid(jid string) {
 	if !IsUserRegistered(jid) {
 		for _, c := range contacList {
 			if c.Jid == jid {
-				users = append(users, BotUser{c, CreateEmptySettings()})
+				users.BotUsers = append(users.BotUsers, BotUser{c, CreateEmptySettings()})
 				break
 			}
 		}
@@ -57,7 +65,7 @@ func AddUserByJid(jid string) {
 
 // DoesUserExist checks if the given jid exists in the user Array
 func DoesUserExist(jid string) bool {
-	for _, u := range users {
+	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
 			return true
 		}
@@ -68,7 +76,7 @@ func DoesUserExist(jid string) bool {
 // GetUserSettings returns the settings of a specific user
 func GetUserSettings(jid string) Settings {
 	// Return the settings
-	for _, u := range users {
+	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
 			return u.Settings
 		}
@@ -77,7 +85,7 @@ func GetUserSettings(jid string) Settings {
 	// User isn't registered yet. Do it now!
 	AddUserByJid(jid)
 	// Return the settings
-	for _, u := range users {
+	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
 			return u.Settings
 		}
@@ -87,11 +95,43 @@ func GetUserSettings(jid string) Settings {
 
 // GetUserIndex returns a Users index within the Array
 func GetUserIndex(message whatsapp.TextMessage) int {
-	for i, u := range users {
+	for i, u := range users.BotUsers {
 		if u.Contact.Jid == MessageToJid(message) {
 			return i
 		}
 	}
 
 	return -1
+}
+
+// SaveUsersToDisk saves the BotUser-Slice
+func SaveUsersToDisk(path string) {
+	if len(users.BotUsers) > 0 {
+		usersJSON, _ := json.Marshal(users)
+
+		usersJSON = EncryptData(usersJSON)
+
+		ioutil.WriteFile(path, usersJSON, 0600)
+		println("--- Users saved ---")
+	} else {
+		println("---Save failed, no entries---")
+	}
+}
+
+// LoadUsersFromDisk loads the BotUser-Slice
+// - returns false if no data could be loaded
+func LoadUsersFromDisk(path string) bool {
+	savedUsers := BotUserList{}
+
+	savedData, err := ioutil.ReadFile(path)
+	if err == nil {
+		savedData = DecryptData(savedData)
+		err = json.Unmarshal(savedData, &savedUsers)
+		if err == nil {
+			users = savedUsers
+			return true
+		}
+	}
+
+	return false
 }

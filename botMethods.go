@@ -80,7 +80,7 @@ func HandleSettingsRequest(message whatsapp.TextMessage) {
 
 		// Search User and change the entry
 		AddUserByJid(MessageToJid(message))
-		users[GetUserIndex(message)].Settings.StdTranslationTo = newTranslation
+		users.BotUsers[GetUserIndex(message)].Settings.StdTranslationTo = newTranslation
 
 		// Send a reply
 		WriteTextMessage("Changed @"+MessageToName(message)+"'s {From} to "+newTranslation.String(), message.Info.RemoteJid)
@@ -99,7 +99,7 @@ func HandleSettingsRequest(message whatsapp.TextMessage) {
 
 		// Search User and change the entry
 		AddUserByJid(MessageToJid(message))
-		users[GetUserIndex(message)].Settings.StdTranslationTo = newTranslation
+		users.BotUsers[GetUserIndex(message)].Settings.StdTranslationTo = newTranslation
 
 		// Send a reply
 		WriteTextMessage("Changed @"+MessageToName(message)+"'s {To} to "+newTranslation.String(), message.Info.RemoteJid)

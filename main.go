@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/Rhymen/go-whatsapp"
@@ -15,28 +18,63 @@ var (
 	sess       whatsapp.Session
 	conn       *whatsapp.Conn
 	startTime  = uint64(time.Now().Unix())
+	running    = true
+	encrypKey  = []byte("r4gyXrWSPXzvpBZJ")
 )
 
 func main() {
+	// Login
 	sess, conn = HandleLogin()
 	_ = sess
 
-	// Add a complete MSG Handler
+	// Add the command handler
 	conn.AddHandler(cmd{})
 
+	// Add the message handler
 	go (func() {
 		conn.AddHandler(messageHandler{})
 	})()
 
-	for {
-		time.Sleep(time.Second)
+	// Autosave
+	go (func() {
+		for running {
+			time.Sleep(time.Minute * 2)
+			SaveUsersToDisk(usersFile)
+		}
+	})()
+
+	// Handle console input
+	go HandleConsoleInput()
+
+	for running {
+		time.Sleep(time.Minute)
 	}
 }
 
+// HandleConsoleInput is used to execute Admin-commands in console
+func HandleConsoleInput() {
+	reader := bufio.NewReader(os.Stdin)
+
+	for running {
+		input, _ := reader.ReadString('\n')
+		input = strings.Replace(input, "\n", "", 1)
+
+		if strings.ToLower(input) == "save" {
+			println("saving...")
+			SaveUsersToDisk(usersFile)
+		} else if strings.ToLower(input) == "quit" {
+			SaveUsersToDisk(usersFile)
+			running = false
+		}
+	}
+}
+
+// HandleError prints potential errors
 func (cmd) HandleError(err error) {
 	fmt.Println(err.Error())
 }
 
+// HandleContactList fills the contacList on load
 func (cmd) HandleContactList(contacts []whatsapp.Contact) {
 	for _, c := range contacts {
 		contacList = append(contacts, c)

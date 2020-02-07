@@ -13,20 +13,27 @@ import (
 	"github.com/skip2/go-qrcode"
 )
 
-const (
+var (
 	qrCodeFile      = "qr.png"
-	sessionFile     = "storedSession.json"
+	sessionFile     = "storedSession.dat"
+	usersFile       = "storedUsers.dat"
 	whatsappTimeout = 20 * time.Second
 )
 
 // HandleLogin returns a connection and session-pointer.
 // If there is an error, the program will exit
 func HandleLogin() (whatsapp.Session, *whatsapp.Conn) {
+	// Try to load a stored session for quick connection
 	savedSession := whatsapp.Session{}
-
 	savedData, err := ioutil.ReadFile(sessionFile)
 	if err == nil {
+		savedData = DecryptData(savedData)
 		err = json.Unmarshal(savedData, &savedSession)
+	}
+
+	// Try to load a stored users list
+	if LoadUsersFromDisk(usersFile) {
+		println("Found an loaded a stored usersFile!")
 	}
 
 	// If there is no session stored
@@ -59,6 +66,7 @@ func HandleLogin() (whatsapp.Session, *whatsapp.Conn) {
 		}
 		// Save new session to quickly start the next time
 		sessionJSON, _ := json.Marshal(sess)
+		sessionJSON = EncryptData(sessionJSON)
 		ioutil.WriteFile(sessionFile, sessionJSON, 0600)
 		fmt.Println("Session saved.")
 		scanChan <- true
