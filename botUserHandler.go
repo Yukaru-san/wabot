@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 
 	"github.com/Rhymen/go-whatsapp"
-	"golang.org/x/text/language"
 )
 
 var users = BotUserList{}
@@ -18,27 +17,19 @@ type BotUserList struct {
 // BotUser contains the contact and his personal settings
 type BotUser struct {
 	Contact  whatsapp.Contact
-	Settings Settings
-}
-
-// Settings contain a users settings
-type Settings struct {
-	StdTranslationFrom language.Tag
-	StdTranslationTo   language.Tag
-}
-
-// CreateEmptySettings Returns a Settings struct with default input
-// TODO Update this method when changing the struct
-func CreateEmptySettings() Settings {
-	return Settings{
-		StdTranslationFrom: language.German,
-		StdTranslationTo:   language.English,
-	}
+	Settings map[string]interface{}
 }
 
 // AddUser adds a new member to the group and prepares a Settings struct for him
 func AddUser(user whatsapp.Contact) {
-	users.BotUsers = append(users.BotUsers, BotUser{user, CreateEmptySettings()})
+	users.BotUsers = append(users.BotUsers, BotUser{Contact: user})
+}
+
+// CreateNewSettingsOption adds the interface to the general BotUser struct
+func CreateNewSettingsOption(identifier string, options interface{}) {
+	for i := 0; i < len(users.BotUsers); i++ {
+		users.BotUsers[i].Settings[identifier] = options
+	}
 }
 
 // IsUserRegistered checks if the given jid exists in the array
@@ -56,7 +47,7 @@ func AddUserByJid(jid string) {
 	if !IsUserRegistered(jid) {
 		for _, c := range contacList {
 			if c.Jid == jid {
-				users.BotUsers = append(users.BotUsers, BotUser{c, CreateEmptySettings()})
+				users.BotUsers = append(users.BotUsers, BotUser{Contact: c})
 				break
 			}
 		}
@@ -73,8 +64,8 @@ func DoesUserExist(jid string) bool {
 	return false
 }
 
-// GetUserSettings returns the settings of a specific user
-func GetUserSettings(jid string) Settings {
+// GetAllUserSettings returns the settings of a specific user
+func GetAllUserSettings(jid string) map[string]interface{} {
 	// Return the settings
 	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
@@ -90,7 +81,28 @@ func GetUserSettings(jid string) Settings {
 			return u.Settings
 		}
 	}
-	return Settings{}
+	return nil
+}
+
+// GetUserSettings returns the settings of a specific user
+func GetUserSettings(settingsIdentifier string, jid string) interface{} {
+	// Return the settings
+	for _, u := range users.BotUsers {
+		if u.Contact.Jid == jid {
+			return u.Settings[settingsIdentifier]
+		}
+	}
+
+	// User isn't registered yet. Do it now!
+	AddUserByJid(jid)
+	// Return the settings
+	for _, u := range users.BotUsers {
+		if u.Contact.Jid == jid {
+			return u.Settings[settingsIdentifier]
+		}
+	}
+
+	return nil
 }
 
 // GetUserIndex returns a Users index within the Array

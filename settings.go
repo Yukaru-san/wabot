@@ -12,6 +12,14 @@ import (
 
 type cmd struct{}
 
+/*
+	TODO
+
+	Access to User Handle
+	Allow Adding more stuff
+
+*/
+
 var (
 	botname          = "Yukaru-Bot"
 	consoleWriteTo   = ""
