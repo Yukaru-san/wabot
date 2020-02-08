@@ -7,6 +7,8 @@ import (
 	"github.com/Rhymen/go-whatsapp"
 )
 
+var settingsStruct struct{}
+
 var users = BotUserList{}
 
 // BotUserList saves the BotUser-Array - easy to save&load
@@ -17,7 +19,7 @@ type BotUserList struct {
 // BotUser contains the contact and his personal settings
 type BotUser struct {
 	Contact  whatsapp.Contact
-	Settings map[string]struct{}
+	Settings map[string]string
 }
 
 // AddUser adds a new member to the group and prepares a Settings struct for him
@@ -26,7 +28,7 @@ func AddUser(user whatsapp.Contact) {
 }
 
 // CreateNewSettingsOption adds the struct to the general BotUser struct
-func CreateNewSettingsOption(identifier string, options struct{}) {
+func CreateNewSettingsOption(identifier string, options string) {
 	for i := 0; i < len(users.BotUsers); i++ {
 		users.BotUsers[i].Settings[identifier] = options
 	}
@@ -39,6 +41,7 @@ func IsUserRegistered(jid string) bool {
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -65,7 +68,7 @@ func DoesUserExist(jid string) bool {
 }
 
 // GetAllUserSettings returns the settings of a specific user
-func GetAllUserSettings(jid string) map[string]struct{} {
+func GetAllUserSettings(jid string) map[string]string {
 	// Return the settings
 	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
@@ -85,7 +88,7 @@ func GetAllUserSettings(jid string) map[string]struct{} {
 }
 
 // GetUserSettings returns the settings of a specific user
-func GetUserSettings(settingsIdentifier string, jid string) struct{} {
+func GetUserSettings(settingsIdentifier string, jid string) string {
 	// Return the settings
 	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
@@ -102,7 +105,7 @@ func GetUserSettings(settingsIdentifier string, jid string) struct{} {
 		}
 	}
 
-	return struct{}{}
+	return ""
 }
 
 // GetUserIndex returns a Users index within the Array
