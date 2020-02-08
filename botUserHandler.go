@@ -138,7 +138,7 @@ func LoadUsersFromDisk(path string) bool {
 		savedData = DecryptData(savedData)
 		err = json.Unmarshal(savedData, &savedUsers)
 		if err == nil {
-			users = savedUsers
+			users = &savedUsers
 			return true
 		}
 	}
