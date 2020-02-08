@@ -115,13 +115,13 @@ func GetUserIndex(message whatsapp.TextMessage) int {
 }
 
 // SaveUsersToDisk saves the BotUser-Slice
-func SaveUsersToDisk(path string) {
+func SaveUsersToDisk() {
 	if len(users.BotUsers) > 0 {
 		usersJSON, _ := json.Marshal(users)
 
 		usersJSON = EncryptData(usersJSON)
 
-		ioutil.WriteFile(path, usersJSON, 0600)
+		ioutil.WriteFile(usersFile, usersJSON, 0600)
 		println("--- Users saved ---")
 	} else {
 		println("---Save failed, no entries---")

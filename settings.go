@@ -1,10 +1,7 @@
 package wabot
 
 import (
-	"bufio"
 	"fmt"
-	"os"
-	"strings"
 	"time"
 
 	"github.com/Rhymen/go-whatsapp"
@@ -21,16 +18,25 @@ type cmd struct{}
 */
 
 var (
-	botname          = "Yukaru-Bot"
-	consoleWriteTo   = ""
-	contacList       []whatsapp.Contact
-	session          whatsapp.Session
-	conn             *whatsapp.Conn
+	botname        = "Yukaru-Bot"
+	consoleWriteTo = ""
+
+	contacList []whatsapp.Contact
+
+	session whatsapp.Session
+	conn    *whatsapp.Conn
+
 	startTime        = uint64(time.Now().Unix())
 	errorTimeout     = time.Minute * 1
 	autosaveInterval = time.Minute * 3
+
 	encrypKey        = []byte("r4gyXrWSPXzvpBZJ")
 	showTextMessages = true
+
+	qrCodeFile      = "qr.png"
+	sessionFile     = "storedSession.dat"
+	usersFile       = "storedUsers.dat"
+	whatsappTimeout = 20 * time.Second
 )
 
 // SetEncryptionKey replaces the standard encryption Key
@@ -80,33 +86,20 @@ func StartBot(roomName string) (whatsapp.Session, *whatsapp.Conn) {
 	// Add the command handler
 	conn.AddHandler(cmd{})
 
+	// Saves in intervals
+	go (func() {
+		for {
+			time.Sleep(autosaveInterval)
+			SaveUsersToDisk()
+		}
+	})()
+	//
 	// Add the message handler
 	go (func() {
 		conn.AddHandler(messageHandler{})
 	})()
 
 	return session, conn
-}
-
-// HandleConsoleInput is used to execute Admin-commands in console
-func HandleConsoleInput() {
-	reader := bufio.NewReader(os.Stdin)
-
-	for {
-		input, _ := reader.ReadString('\n')
-		input = strings.Replace(input, "\n", "", 1)
-
-		if strings.ToLower(input) == "save" {
-			println("saving...")
-			SaveUsersToDisk(usersFile)
-		} else if strings.HasPrefix(input, "/write") {
-			if consoleWriteTo != "" {
-				WriteTextMessage(input[7:], NameToJid("Denis"))
-			}
-		} else if strings.HasPrefix(input, "/wt") {
-			consoleWriteTo = input[3:]
-		}
-	}
 }
 
 // HandleError prints potential errors

@@ -7,17 +7,9 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
-	"time"
 
 	"github.com/Rhymen/go-whatsapp"
 	"github.com/skip2/go-qrcode"
-)
-
-var (
-	qrCodeFile      = "qr.png"
-	sessionFile     = "storedSession.dat"
-	usersFile       = "storedUsers.dat"
-	whatsappTimeout = 20 * time.Second
 )
 
 // HandleLogin returns a connection and session-pointer.

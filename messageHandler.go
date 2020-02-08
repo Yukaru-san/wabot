@@ -54,16 +54,3 @@ func (messageHandler) HandleJSONMessage(message string) {
 func (messageHandler) HandleContactMessage(message whatsapp.ContactMessage) {
 	//fmt.Println(message)
 }
-
-/*	authorID := "-"
-
-	if len(message.Info.Source.GetPushName()) > 0 {
-		authorID = message.Info.Source.GetPushName()
-	} else if message.Info.Source.Participant != nil {
-		authorID = *message.Info.Source.Participant
-	} else {
-		authorID = message.Info.RemoteJid // Personennamen
-	}
-
-	println(fmt.Sprintf("%s: %s", jidToName(authorID), message.Text))
-*/
