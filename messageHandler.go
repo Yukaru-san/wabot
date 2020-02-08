@@ -1,7 +1,8 @@
-package main
+package wabot
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/Rhymen/go-whatsapp"
@@ -11,18 +12,22 @@ type messageHandler struct{}
 
 // Mainly caused by another instance of Whatsapp Web being opened
 func (messageHandler) HandleError(err error) {
-	// Reconnect after a given amount of time
-	println("Another instance of Whatsapp Web has been opened. Waiting to try again...")
-	time.Sleep(errorTimeout)
-	sess, conn = HandleLogin()
+	if strings.Contains(err.Error(), "closed") {
+		// Reconnect after a given amount of time
+		println("Another instance of Whatsapp Web has been opened. Waiting to try again...")
+		time.Sleep(errorTimeout)
+		session, conn = HandleLogin()
+	}
 }
 
 func (messageHandler) HandleTextMessage(message whatsapp.TextMessage) {
 
 	if message.Info.Timestamp > startTime && jidToName(message.Info.RemoteJid) == conn.Info.Pushname {
-		go HandleBotMsg(message, conn)
+		go HandleBotMsg(message)
 
-		println(fmt.Sprintf("%s: %s", jidToName(MessageToJid(message)), message.Text))
+		if showTextMessages {
+			println(fmt.Sprintf("%s: %s", jidToName(MessageToJid(message)), message.Text))
+		}
 	}
 }
 

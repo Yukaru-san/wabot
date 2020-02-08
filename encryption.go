@@ -1,4 +1,4 @@
-package main
+package wabot
 
 import (
 	"crypto/aes"

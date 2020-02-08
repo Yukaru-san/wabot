@@ -1,4 +1,4 @@
-package main
+package wabot
 
 import (
 	"bufio"
@@ -13,20 +13,61 @@ import (
 type cmd struct{}
 
 var (
-	botname      = "Yukaru-Bot"
-	contacList   []whatsapp.Contact
-	sess         whatsapp.Session
-	conn         *whatsapp.Conn
-	startTime    = uint64(time.Now().Unix())
-	errorTimeout = time.Minute * 1
-	running      = true
-	encrypKey    = []byte("r4gyXrWSPXzvpBZJ")
+	botname          = "Yukaru-Bot"
+	consoleWriteTo   = ""
+	contacList       []whatsapp.Contact
+	session          whatsapp.Session
+	conn             *whatsapp.Conn
+	startTime        = uint64(time.Now().Unix())
+	errorTimeout     = time.Minute * 1
+	autosaveInterval = time.Minute * 3
+	encrypKey        = []byte("r4gyXrWSPXzvpBZJ")
+	showTextMessages = true
 )
 
-func main() {
+// SetEncryptionKey replaces the standard encryption Key
+//  - Key has to be 16 Byte long
+//  - Returns false if the key is bad
+func SetEncryptionKey(key []byte) bool {
+	if len(key) < 16 || len(key) > 16 {
+		return false
+	}
+
+	encrypKey = key
+	return true
+}
+
+// SetAutosaveInterval - interval of userdata saving
+func SetAutosaveInterval(interval time.Duration) {
+	autosaveInterval = interval
+}
+
+// SetErrorTimeout sets the default time to reconnect after
+// an error caused the program to disconnect
+func SetErrorTimeout(timeout time.Duration) {
+	errorTimeout = timeout
+}
+
+// AddCommand add a comand the program will listen to
+// Inputs will be determined by their prefix
+// - Always requires a function to take whatsapp.TextMessage as parameter
+func AddCommand(cmd string, functionToExecute func(whatsapp.TextMessage)) { // TODO implement another checking method
+	commands = append(commands, Command{prefix: cmd, function: functionToExecute})
+}
+
+// DisplayTextMessagesInConsole toggles visibility in console
+func DisplayTextMessagesInConsole(display bool) {
+	showTextMessages = display
+}
+
+// StartBot initiates and starts the bot
+// Takes in the name of the group to be run in
+func StartBot(roomName string) {
+	// Self identification
+	botname = roomName
+
 	// Login
-	sess, conn = HandleLogin()
-	_ = sess
+	session, conn = HandleLogin()
 
 	// Add the command handler
 	conn.AddHandler(cmd{})
@@ -35,37 +76,25 @@ func main() {
 	go (func() {
 		conn.AddHandler(messageHandler{})
 	})()
-
-	// Autosave
-	go (func() {
-		for running {
-			time.Sleep(time.Minute * 2)
-			SaveUsersToDisk(usersFile)
-		}
-	})()
-
-	// Handle console input
-	go HandleConsoleInput()
-
-	for running {
-		time.Sleep(time.Minute)
-	}
 }
 
 // HandleConsoleInput is used to execute Admin-commands in console
 func HandleConsoleInput() {
 	reader := bufio.NewReader(os.Stdin)
 
-	for running {
+	for {
 		input, _ := reader.ReadString('\n')
 		input = strings.Replace(input, "\n", "", 1)
 
 		if strings.ToLower(input) == "save" {
 			println("saving...")
 			SaveUsersToDisk(usersFile)
-		} else if strings.ToLower(input) == "quit" {
-			SaveUsersToDisk(usersFile)
-			running = false
+		} else if strings.HasPrefix(input, "/write") {
+			if consoleWriteTo != "" {
+				WriteTextMessage(input[7:], NameToJid("Denis"))
+			}
+		} else if strings.HasPrefix(input, "/wt") {
+			consoleWriteTo = input[3:]
 		}
 	}
 }

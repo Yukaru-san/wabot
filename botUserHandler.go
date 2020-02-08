@@ -1,4 +1,4 @@
-package main
+package wabot
 
 import (
 	"encoding/json"

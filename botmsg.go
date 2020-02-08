@@ -1,4 +1,4 @@
-package main
+package wabot
 
 import (
 	"strings"
@@ -6,32 +6,23 @@ import (
 	"github.com/Rhymen/go-whatsapp"
 )
 
-// HandleBotMsg handles messages sent to the bot
-func HandleBotMsg(message whatsapp.TextMessage, conn *whatsapp.Conn) {
-	// Function 1: Translate
-	if (!strings.HasPrefix(message.Text, "/tf") && !strings.HasPrefix(message.Text, "/tt")) && (strings.HasPrefix(message.Text, "/t") || strings.HasPrefix(message.Text, "!t")) {
-		println("Handling a new translation request...")
-		go HandleTranslateRequest(message)
+// Command struct
+type Command struct {
+	prefix   string
+	function func(whatsapp.TextMessage)
+}
 
-		// Function 2: Anime List
-	} else if strings.HasPrefix(message.Text, "/al") {
-		println("Handling Anime-List request...")
-		go HandleAnimeListRequest(message)
+// List of implemented commands
+var commands []Command
 
-		// Function 3: Pick
-	} else if strings.HasPrefix(message.Text, "/pick") {
-		println("Handling Pick request...")
-		go HandlePickRequest(message)
-
-		// Function 4: Help
-	} else if strings.HasPrefix(message.Text, "/help") || strings.HasPrefix(message.Text, "!help") {
-		println("Sending a help message...")
-		go WriteTextMessage(helpMsg, message.Info.RemoteJid)
-
-		// Function 5: Settings
-	} else {
-		// Always run this code on unknown messages. Spares time evaluating a msg
-		go HandleSettingsRequest(message)
+// HandleBotMsg checks if a message is a command and executes the first possible command
+func HandleBotMsg(message whatsapp.TextMessage) {
+	// Run through command list and execute if possible
+	for i := 0; i < len(commands); i++ {
+		if strings.HasPrefix(message.Text, commands[i].prefix) {
+			go commands[i].function(message)
+			break
+		}
 	}
 }
 
