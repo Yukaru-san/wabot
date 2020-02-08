@@ -17,7 +17,7 @@ type BotUserList struct {
 // BotUser contains the contact and his personal settings
 type BotUser struct {
 	Contact  whatsapp.Contact
-	Settings map[string]interface{}
+	Settings interface{}
 }
 
 // AddUser adds a new member to the group and prepares a Settings struct for him
@@ -26,9 +26,9 @@ func AddUser(user whatsapp.Contact) {
 }
 
 // CreateNewSettingsOption adds the interface to the general BotUser struct
-func CreateNewSettingsOption(identifier string, options interface{}) {
+func CreateNewSettingsOption(settings interface{}) {
 	for i := 0; i < len(users.BotUsers); i++ {
-		users.BotUsers[i].Settings[identifier] = options
+		users.BotUsers[i].Settings = settings
 	}
 }
 
@@ -64,12 +64,12 @@ func DoesUserExist(jid string) bool {
 	return false
 }
 
-// GetAllUserSettings returns the settings of a specific user
-func GetAllUserSettings(jid string) map[string]interface{} {
+// ChangeUserSettings a users settings
+func ChangeUserSettings(jid string, settings interface{}) {
 	// Return the settings
 	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
-			return u.Settings
+			u.Settings = settings
 		}
 	}
 
@@ -78,18 +78,17 @@ func GetAllUserSettings(jid string) map[string]interface{} {
 	// Return the settings
 	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
-			return u.Settings
+			u.Settings = settings
 		}
 	}
-	return nil
 }
 
 // GetUserSettings returns the settings of a specific user
-func GetUserSettings(settingsIdentifier string, jid string) interface{} {
+func GetUserSettings(jid string) interface{} {
 	// Return the settings
 	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
-			return u.Settings[settingsIdentifier]
+			return u.Settings
 		}
 	}
 
@@ -98,10 +97,9 @@ func GetUserSettings(settingsIdentifier string, jid string) interface{} {
 	// Return the settings
 	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
-			return u.Settings[settingsIdentifier]
+			return u.Settings
 		}
 	}
-
 	return nil
 }
 
