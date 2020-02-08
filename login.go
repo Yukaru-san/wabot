@@ -23,11 +23,6 @@ func HandleLogin() (whatsapp.Session, *whatsapp.Conn) {
 		err = json.Unmarshal(savedData, &savedSession)
 	}
 
-	// Try to load a stored users list
-	if LoadUsersFromDisk(usersFile) {
-		println("Found an loaded a stored usersFile!")
-	}
-
 	// If there is no session stored
 	if err != nil {
 		// Requests token with a 20s timeout
