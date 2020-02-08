@@ -13,13 +13,14 @@ import (
 type cmd struct{}
 
 var (
-	botname    = "Yukaru-Bot"
-	contacList []whatsapp.Contact
-	sess       whatsapp.Session
-	conn       *whatsapp.Conn
-	startTime  = uint64(time.Now().Unix())
-	running    = true
-	encrypKey  = []byte("r4gyXrWSPXzvpBZJ")
+	botname      = "Yukaru-Bot"
+	contacList   []whatsapp.Contact
+	sess         whatsapp.Session
+	conn         *whatsapp.Conn
+	startTime    = uint64(time.Now().Unix())
+	errorTimeout = time.Minute * 1
+	running      = true
+	encrypKey    = []byte("r4gyXrWSPXzvpBZJ")
 )
 
 func main() {
@@ -117,11 +118,26 @@ func jidToName(jid string) string {
 	for _, c := range contacList {
 		if c.Jid == jid {
 			if c.Name == botname {
-				return "Admin"
+				return conn.Info.Pushname
 			}
 
 			return c.Name
 		}
 	}
 	return "{undefined}"
+}
+
+// NameToJid finds the corresponding Jid to a name
+// Returns {undefined} on error
+func NameToJid(name string) string {
+	botname = "Yukaru-Bot"
+
+	for _, c := range contacList {
+		if jidToName(c.Jid) == name {
+			return c.Jid
+		}
+	}
+
+	return "{undefined}"
+
 }

@@ -2,19 +2,24 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/Rhymen/go-whatsapp"
 )
 
 type messageHandler struct{}
 
+// Mainly caused by another instance of Whatsapp Web being opened
 func (messageHandler) HandleError(err error) {
-	//fmt.Fprintf(os.Stderr, "%v", err)
+	// Reconnect after a given amount of time
+	println("Another instance of Whatsapp Web has been opened. Waiting to try again...")
+	time.Sleep(errorTimeout)
+	sess, conn = HandleLogin()
 }
 
 func (messageHandler) HandleTextMessage(message whatsapp.TextMessage) {
 
-	if message.Info.Timestamp > startTime && jidToName(message.Info.RemoteJid) == "Admin" {
+	if message.Info.Timestamp > startTime && jidToName(message.Info.RemoteJid) == conn.Info.Pushname {
 		go HandleBotMsg(message, conn)
 
 		println(fmt.Sprintf("%s: %s", jidToName(MessageToJid(message)), message.Text))
