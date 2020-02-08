@@ -19,7 +19,7 @@ var commands []Command
 func HandleBotMsg(message whatsapp.TextMessage) {
 	// Run through command list and execute if possible
 	for i := 0; i < len(commands); i++ {
-		if strings.HasPrefix(message.Text, commands[i].prefix) {
+		if strings.HasPrefix(strings.ToLower(message.Text), strings.ToLower(commands[i].prefix)) {
 			go commands[i].function(message)
 			break
 		}

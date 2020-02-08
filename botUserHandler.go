@@ -69,7 +69,7 @@ func ChangeUserSettings(jid string, settings interface{}) {
 	// Return the settings
 	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
-			u.Settings = &settings
+			u.Settings = settings
 		}
 	}
 
@@ -78,7 +78,7 @@ func ChangeUserSettings(jid string, settings interface{}) {
 	// Return the settings
 	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
-			u.Settings = &settings
+			u.Settings = settings
 		}
 	}
 }
