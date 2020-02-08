@@ -13,7 +13,7 @@ import (
 type cmd struct{}
 
 var (
-	botname    = "Test-Gruppe"
+	botname    = "Yukaru-Bot"
 	contacList []whatsapp.Contact
 	sess       whatsapp.Session
 	conn       *whatsapp.Conn

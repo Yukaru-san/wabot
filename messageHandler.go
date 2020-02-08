@@ -17,35 +17,8 @@ func (messageHandler) HandleTextMessage(message whatsapp.TextMessage) {
 	if message.Info.Timestamp > startTime && jidToName(message.Info.RemoteJid) == "Admin" {
 		go HandleBotMsg(message, conn)
 
-		authorID := "-"
-
-		if len(message.Info.Source.GetPushName()) > 0 {
-			authorID = message.Info.Source.GetPushName()
-		} else if message.Info.Source.Participant != nil {
-			authorID = *message.Info.Source.Participant
-		} else {
-			authorID = message.Info.RemoteJid // Personennamen
-		}
-
-		println(fmt.Sprintf("%s: %s", jidToName(authorID), message.Text))
+		println(fmt.Sprintf("%s: %s", jidToName(MessageToJid(message)), message.Text))
 	}
-
-	//	if jidToName(message.Info.RemoteJid) == "Test-Gruppe" {
-	/*
-		authorID := "-"
-
-		if len(message.Info.Source.GetPushName()) > 0 {
-			authorID = message.Info.Source.GetPushName()
-		} else if message.Info.Source.Participant != nil {
-			authorID = *message.Info.Source.Participant
-		} else {
-			authorID = message.Info.RemoteJid // Personennamen
-		}
-
-		println(fmt.Sprintf("%s: %s", jidToName(authorID), message.Text))
-		// TODO weitere interaktionen?
-		//	}
-	*/
 }
 
 func (messageHandler) HandleImageMessage(message whatsapp.ImageMessage) {

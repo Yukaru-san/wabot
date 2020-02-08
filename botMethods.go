@@ -1,7 +1,10 @@
 package main
 
 import (
+	"math/rand"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/Rhymen/go-whatsapp"
 	"github.com/bregydoc/gtranslate"
@@ -17,9 +20,8 @@ var (
 		"/tf {language}\n   -   set your default {from} lang\n" +
 		"/tt {language}\n   -   set your default {to} lang\n" +
 		"/printSettings\n   -   prints your current settings\n" +
-		"--------------------------------------------------------\n" +
-		"commands can be initiated with\n \"!\" or \"/\"\n" +
-		"--------------------------------------------------------"
+		"/al {day}\n   -    airing anime from today+{0-6}" +
+		"/pick\n   -   picks a random entry of a list\n      can only be used as an answer"
 )
 
 // HandleTranslateRequest handles a translation request
@@ -119,4 +121,39 @@ func HandleSettingsRequest(message whatsapp.TextMessage) {
 	}
 
 	// TODO Add more here
+}
+
+// HandleAnimeListRequest sends airing anime to the requesting user
+func HandleAnimeListRequest(message whatsapp.TextMessage) {
+	// Pre-error finding
+	if len(message.Text) < 4 {
+		WriteTextMessage("Sorry!\nCouldn't understand your input. Please type a number between 0 and 6", message.Info.RemoteJid)
+	}
+	// Parse
+	day, err := strconv.ParseInt(message.Text[4:], 10, 64)
+	// Good input
+	if err == nil && day >= 0 && day <= 6 {
+		WriteTextMessage(GetAiringAnime(int(day)), message.Info.RemoteJid)
+		return
+	}
+	// Input error
+	WriteTextMessage("Sorry!\nCouldn't understand your input. Please type a number between 0 and 6", message.Info.RemoteJid)
+}
+
+// HandlePickRequest picks one entry of a sent list and replies it
+func HandlePickRequest(message whatsapp.TextMessage) {
+
+	// Try to find the quoted message
+	txt := ""
+	if message.ContextInfo.QuotedMessage != nil {
+		txt = message.ContextInfo.QuotedMessage.GetConversation()
+	} else {
+		WriteTextMessage("Sorry!\nThis command can only be used while quoting a message", message.Info.RemoteJid)
+	}
+	// Possible picks
+	options := strings.Split(txt, "\n")
+
+	// Reply a random entry
+	rand.Seed(time.Now().UnixNano())
+	WriteTextMessage("Random pick:\n"+options[rand.Intn(len(options)+1)], message.Info.RemoteJid)
 }

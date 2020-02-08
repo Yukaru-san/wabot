@@ -13,12 +13,22 @@ func HandleBotMsg(message whatsapp.TextMessage, conn *whatsapp.Conn) {
 		println("Handling a new translation request...")
 		go HandleTranslateRequest(message)
 
-		// Function 2: Help
+		// Function 2: Anime List
+	} else if strings.HasPrefix(message.Text, "/al") {
+		println("Handling Anime-List request...")
+		go HandleAnimeListRequest(message)
+
+		// Function 3: Pick
+	} else if strings.HasPrefix(message.Text, "/pick") {
+		println("Handling Pick request...")
+		go HandlePickRequest(message)
+
+		// Function 4: Help
 	} else if strings.HasPrefix(message.Text, "/help") || strings.HasPrefix(message.Text, "!help") {
 		println("Sending a help message...")
 		go WriteTextMessage(helpMsg, message.Info.RemoteJid)
 
-		// Function 3: Settings
+		// Function 5: Settings
 	} else {
 		// Always run this code on unknown messages. Spares time evaluating a msg
 		go HandleSettingsRequest(message)
