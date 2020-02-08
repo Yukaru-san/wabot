@@ -7,11 +7,11 @@ import (
 	"github.com/Rhymen/go-whatsapp"
 )
 
-var users = &BotUserList{}
+var users = BotUserList{}
 
 // BotUserList saves the BotUser-Array - easy to save&load
 type BotUserList struct {
-	BotUsers []BotUser
+	BotUsers []*BotUser
 }
 
 // BotUser contains the contact and his personal settings
@@ -22,7 +22,7 @@ type BotUser struct {
 
 // AddUser adds a new member to the group and prepares a Settings struct for him
 func AddUser(user whatsapp.Contact) {
-	users.BotUsers = append(users.BotUsers, BotUser{Contact: user})
+	users.BotUsers = append(users.BotUsers, &BotUser{Contact: user})
 }
 
 // CreateNewSettingsOption adds the interface to the general BotUser struct
@@ -47,7 +47,7 @@ func AddUserByJid(jid string) {
 	if !IsUserRegistered(jid) {
 		for _, c := range contacList {
 			if c.Jid == jid {
-				users.BotUsers = append(users.BotUsers, BotUser{Contact: c})
+				users.BotUsers = append(users.BotUsers, &BotUser{Contact: c})
 				break
 			}
 		}
@@ -138,7 +138,7 @@ func LoadUsersFromDisk(path string) bool {
 		savedData = DecryptData(savedData)
 		err = json.Unmarshal(savedData, &savedUsers)
 		if err == nil {
-			users = &savedUsers
+			users = savedUsers
 			return true
 		}
 	}
