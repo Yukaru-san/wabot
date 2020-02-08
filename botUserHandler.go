@@ -17,7 +17,7 @@ type BotUserList struct {
 // BotUser contains the contact and his personal settings
 type BotUser struct {
 	Contact  whatsapp.Contact
-	Settings interface{}
+	Settings *interface{}
 }
 
 // AddUser adds a new member to the group and prepares a Settings struct for him
@@ -28,7 +28,7 @@ func AddUser(user whatsapp.Contact) {
 // CreateNewSettingsOption adds the interface to the general BotUser struct
 func CreateNewSettingsOption(settings interface{}) {
 	for i := 0; i < len(users.BotUsers); i++ {
-		users.BotUsers[i].Settings = settings
+		users.BotUsers[i].Settings = &settings
 	}
 }
 
@@ -69,7 +69,7 @@ func ChangeUserSettings(jid string, settings interface{}) {
 	// Return the settings
 	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
-			u.Settings = settings
+			u.Settings = &settings
 		}
 	}
 
@@ -78,7 +78,7 @@ func ChangeUserSettings(jid string, settings interface{}) {
 	// Return the settings
 	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
-			u.Settings = settings
+			u.Settings = &settings
 		}
 	}
 }
