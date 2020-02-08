@@ -7,7 +7,7 @@ import (
 	"github.com/Rhymen/go-whatsapp"
 )
 
-var users = BotUserList{}
+var users = &BotUserList{}
 
 // BotUserList saves the BotUser-Array - easy to save&load
 type BotUserList struct {
