@@ -61,8 +61,8 @@ func DisplayTextMessagesInConsole(display bool) {
 }
 
 // StartBot initiates and starts the bot
-// Takes in the name of the group to be run in
-func StartBot(roomName string) {
+// - Takes in the name of the group to be run in
+func StartBot(roomName string) (whatsapp.Session, *whatsapp.Conn) {
 	// Self identification
 	botname = roomName
 
@@ -76,6 +76,8 @@ func StartBot(roomName string) {
 	go (func() {
 		conn.AddHandler(messageHandler{})
 	})()
+
+	return session, conn
 }
 
 // HandleConsoleInput is used to execute Admin-commands in console
