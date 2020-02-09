@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Rhymen/go-whatsapp"
+	"github.com/Yukaru-san/go-whatsapp"
 )
 
 type cmd struct{}
@@ -68,11 +68,21 @@ func SetErrorTimeout(timeout time.Duration) {
 	errorTimeout = timeout
 }
 
-// AddCommand add a comand the program will listen to
+// AddTextCommand add a comand the program will listen to
 // Inputs will be determined by their prefix
 // - Always requires a function to take whatsapp.TextMessage as parameter
-func AddCommand(cmd string, functionToExecute func(whatsapp.TextMessage)) { // TODO implement another checking method
+func AddTextCommand(cmd string, functionToExecute func(whatsapp.TextMessage)) { // TODO implement another checking method
 	commands = append(commands, Command{prefix: cmd, function: functionToExecute})
+}
+
+// SetImageHandler calls the given function when receiving an img
+func SetImageHandler(functionToExecute func(whatsapp.ImageMessage)) {
+	imageHandleFunction = functionToExecute
+}
+
+// SetStickerHandler calls the given function when receiving an img
+func SetStickerHandler(functionToExecute func(whatsapp.StickerMessage)) {
+	stickerHandleFunction = functionToExecute
 }
 
 // DisplayTextMessagesInConsole toggles visibility in console

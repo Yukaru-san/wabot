@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"runtime"
 
-	"github.com/Rhymen/go-whatsapp"
+	"github.com/Yukaru-san/go-whatsapp"
 	"github.com/skip2/go-qrcode"
 )
 

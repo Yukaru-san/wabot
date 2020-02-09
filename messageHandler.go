@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Rhymen/go-whatsapp"
+	"github.com/Yukaru-san/go-whatsapp"
 )
 
 type messageHandler struct{}
@@ -32,7 +32,9 @@ func (messageHandler) HandleTextMessage(message whatsapp.TextMessage) {
 }
 
 func (messageHandler) HandleImageMessage(message whatsapp.ImageMessage) {
-	//fmt.Println(message)
+	if message.Info.Timestamp > startTime && JidToName(message.Info.RemoteJid) == conn.Info.Pushname {
+		go imageHandleFunction(message)
+	}
 }
 
 func (messageHandler) HandleDocumentMessage(message whatsapp.DocumentMessage) {
@@ -51,6 +53,8 @@ func (messageHandler) HandleJSONMessage(message string) {
 	//	fmt.Println(message)
 }
 
-func (messageHandler) HandleContactMessage(message whatsapp.ContactMessage) {
-	//fmt.Println(message)
+func (messageHandler) HandleStickerMessage(message whatsapp.StickerMessage) {
+	if message.Info.Timestamp > startTime && JidToName(message.Info.RemoteJid) == conn.Info.Pushname {
+		go stickerHandleFunction(message)
+	}
 }
