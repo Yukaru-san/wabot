@@ -96,6 +96,10 @@ func StartBot(roomName string) (whatsapp.Session, *whatsapp.Conn) {
 	// Self identification
 	botname = roomName
 
+	// Create empty functions to prevent crashing on img / sticker
+	SetImageHandler(func(whatsapp.ImageMessage) {})
+	SetStickerHandler(func(whatsapp.StickerMessage) {})
+
 	// Login
 	session, conn = handleLogin()
 
