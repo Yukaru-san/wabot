@@ -10,9 +10,9 @@ other instance. Obviously, commands during this time-out won't have any effect a
 If you wish to do so, just set the ErrorTimeout to something like 100
 
 # Installation
-Just intall Rhymen's library alongside mine
+The bot depends on Rhymen's WhatsApp API but since I forked his original work to add more features, you will need to install these two libraries:
 ```go
-go get github.com/Rhymen/go-whatsapp
+go get github.com/Yukaru-san/go-whatsapp
 ```
 ```go
 go get github.com/Yukaru-san/WhatsApp-GroupBot
@@ -101,32 +101,37 @@ Since the savable data is fully modular, at least the savedata-loading couldn't 
 # Functions
 
 ```go
-StartBot(string)                       // Initializes and starts the bot
-DisplayTextMessagesInConsole(bool      // Toggle printing new messages on / off
-AddCommand(string, func())             // If a message starts with the given string it executes the func
+StartBot(string)                           // Initializes and starts the bot
+DisplayTextMessagesInConsole(bool          // Toggle printing new messages on / off
 
-WriteTextMessage(string, string)       // Writes a WhatsApp messsage to the defined Jid's owner
+AddCommand(string, func())                 // If a message starts with the given string it executes the func
+SetImageHandler(func())                    // Executes the given function when receiving a image  
+SetStickerHandler(func())                  // Executes the given function when receiving a sticker  
 
-SetEncryptionKey([]byte)               // Set a 16 Byte key to encrypt your saved data
+WriteTextMessage(string, string)           // Writes a WhatsApp messsage to the defined Jid's owner
+SendImageMessage(*os.File, string, string) // Sends the given image. Important to check imgType (e.g. "img/png")
+SendStickerMessage(*os.File, string)       // Sends the given sticker. Needs to be a .webp file
 
-MessageToJid(whatsapp.TextMessage)     // Returns the unique ID of the message sender
-MessageToName(whatsapp.TextMessage)    // Returns the sender's name
-JidToName(string)                      // Returns the name of the ID's owner
-NameToJid(string)                      // Returns the corresponding Jid of the user's name
+SetEncryptionKey([]byte)                   // Set a 16 Byte key to encrypt your saved data
 
-DeactivateAutoSaving()                 // Disables automatic saving
-SetAutoSaveInterval(time.Duration)     // Save after every passed interval
-SetErrorTimeout(time.Duration)         // Time until the program will restart after losing connection
+MessageToJid(whatsapp.TextMessage)         // Returns the unique ID of the message sender
+MessageToName(whatsapp.TextMessage)        // Returns the sender's name
+JidToName(string)                          // Returns the name of the ID's owner
+NameToJid(string)                          // Returns the corresponding Jid of the user's name
 
-CreateNewSettingsOption(interface)     // Standard Settings for newly added users
-IsUserRegistered(string) bool          // Checks if the Jid is registered already
-AddUserByJid(string)                   // Registers the jid's owner - if not already registered
-ChangeUserSettings(string, interface)  // Updates the user's settings with the given struct
-GetUserSettings(string) interface      // Returns the Jid-corresponding Settings
-GetUserIndex(whatsapp.TextMessage) int // Returns the message-owner's position in the user-slice
+DeactivateAutoSaving()                     // Disables automatic saving
+SetAutoSaveInterval(time.Duration)         // Save after every passed interval
+SetErrorTimeout(time.Duration)             // Time until the program will restart after losing connection
 
-SaveUsersToDisk() bool                 // Returns true on successful saving
-GetSaveData() (BotUserList, bool)      // Returns the loaded savedata and true if possible (false otherwise)
-UseSaveData(BotUserList)               // Overwrites the userlist with the given one
+CreateNewSettingsOption(interface)         // Standard Settings for newly added users
+IsUserRegistered(string) bool              // Checks if the Jid is registered already
+AddUserByJid(string)                       // Registers the jid's owner - if not already registered
+ChangeUserSettings(string, interface)      // Updates the user's settings with the given struct
+GetUserSettings(string) interface          // Returns the Jid-corresponding Settings
+GetUserIndex(whatsapp.TextMessage) int     // Returns the message-owner's position in the user-slice
+
+SaveUsersToDisk() bool                     // Returns true on successful saving
+GetSaveData() (BotUserList, bool)          // Returns the loaded savedata and true if possible (false otherwise)
+UseSaveData(BotUserList)                   // Overwrites the userlist with the given one
 ```
 *ChangeUserSettings* and *GetUserSettings* both call *AddUserByJid* if needed. You don't need to check yourself!
