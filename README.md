@@ -129,4 +129,4 @@ SaveUsersToDisk() bool                 // Returns true on successful saving
 GetSaveData() (BotUserList, bool)      // Returns the loaded savedata and true if possible (false otherwise)
 UseSaveData(BotUserList)               // Overwrites the userlist with the given one
 ```
-*ChangeUserSettings* an* *GetUserSettings* both call *AddUserByJid* if needed. You don't need to check yourself!
+*ChangeUserSettings* and *GetUserSettings* both call *AddUserByJid* if needed. You don't need to check yourself!
