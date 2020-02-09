@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 
 	"github.com/Rhymen/go-whatsapp"
-	"github.com/mitchellh/mapstructure"
 )
 
 var users = BotUserList{}
@@ -129,10 +128,9 @@ func SaveUsersToDisk() {
 	}
 }
 
-// LoadUsersFromDisk loads the BotUser-Slice
-// - returns false if no data could be loaded
-// - takes in an empty struct of your save type
-func LoadUsersFromDisk(structExample interface{}) bool {
+// GetSaveData returns the stored savedata
+// -> bool is false if there was no data
+func GetSaveData() (BotUserList, bool) {
 	savedUsers := BotUserList{}
 
 	savedData, err := ioutil.ReadFile(usersFile)
@@ -140,18 +138,13 @@ func LoadUsersFromDisk(structExample interface{}) bool {
 		savedData = DecryptData(savedData)
 		err = json.Unmarshal(savedData, &savedUsers)
 		if err == nil {
-			mapstructure.Decode(users, &structExample)
-
-			for i := 0; i < len(savedUsers.BotUsers); i++ {
-				temp := structExample
-				mapstructure.Decode(savedUsers.BotUsers[i].Settings, &temp)
-				savedUsers.BotUsers[i].Settings = temp
-			}
-
-			users = savedUsers
-			return true
+			return savedUsers, true
 		}
 	}
+	return BotUserList{}, false
+}
 
-	return false
+// UseSaveData loads the given data
+func UseSaveData(savedata BotUserList) {
+	users.BotUsers = savedata.BotUsers
 }
