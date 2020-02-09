@@ -54,7 +54,7 @@ func (messageHandler) HandleJSONMessage(message string) {
 }
 
 func (messageHandler) HandleStickerMessage(message whatsapp.StickerMessage) {
-	if message.Info.Timestamp > startTime && JidToName(message.Info.RemoteJid) == conn.Info.Pushname {
+	if message.Info.Timestamp > startTime && JidToName(message.Info.RemoteJid) == conn.Info.Pushname && strings.Contains(message.Info.Source.Message.String(), "url:") {
 		go stickerHandleFunction(message)
 	}
 }
