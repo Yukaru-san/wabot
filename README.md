@@ -98,7 +98,7 @@ func main() {
 ```
 Since the savable data is fully modular, at least the savedata-loading couldn't be included within the library. Therefore it has to be done inside of your own code. As long as you keep the name "Settings" you can use this exact loading part for more-or-less any other project.
 
-# Methods
+# Functions
 
 ```go
 StartBot(string)                       // Initializes and starts the bot
