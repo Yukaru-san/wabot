@@ -7,8 +7,8 @@ import (
 	"io"
 )
 
-// EncryptData uses AES to encrypt using the enckey
-func EncryptData(data []byte) []byte {
+// encryptData uses AES to encrypt using the enckey
+func encryptData(data []byte) []byte {
 
 	// Create the AES cipher
 	block, err := aes.NewCipher(encrypKey)
@@ -37,8 +37,8 @@ func EncryptData(data []byte) []byte {
 	return ciphertext
 }
 
-// DecryptData decrypts a given data with the encKey
-func DecryptData(data []byte) []byte {
+// decryptData decrypts a given data with the encKey
+func decryptData(data []byte) []byte {
 
 	// Create the AES cipher
 	block, err := aes.NewCipher(encrypKey)

@@ -15,8 +15,8 @@ type Command struct {
 // List of implemented commands
 var commands []Command
 
-// HandleBotMsg checks if a message is a command and executes the first possible command
-func HandleBotMsg(message whatsapp.TextMessage) {
+// handleBotMsg checks if a message is a command and executes the first possible command
+func handleBotMsg(message whatsapp.TextMessage) {
 	// Run through command list and execute if possible
 	for i := 0; i < len(commands); i++ {
 		if strings.HasPrefix(strings.ToLower(message.Text), strings.ToLower(commands[i].prefix)) {

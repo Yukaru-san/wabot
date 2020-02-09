@@ -16,17 +16,17 @@ func (messageHandler) HandleError(err error) {
 		// Reconnect after a given amount of time
 		println("Another instance of Whatsapp Web has been opened. Waiting to try again...")
 		time.Sleep(errorTimeout)
-		session, conn = HandleLogin()
+		session, conn = handleLogin()
 	}
 }
 
 func (messageHandler) HandleTextMessage(message whatsapp.TextMessage) {
 
-	if message.Info.Timestamp > startTime && jidToName(message.Info.RemoteJid) == conn.Info.Pushname {
-		go HandleBotMsg(message)
+	if message.Info.Timestamp > startTime && JidToName(message.Info.RemoteJid) == conn.Info.Pushname {
+		go handleBotMsg(message)
 
 		if showTextMessages {
-			println(fmt.Sprintf("%s: %s", jidToName(MessageToJid(message)), message.Text))
+			println(fmt.Sprintf("%s: %s", JidToName(MessageToJid(message)), message.Text))
 		}
 	}
 }

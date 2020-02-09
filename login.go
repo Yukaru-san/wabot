@@ -12,14 +12,14 @@ import (
 	"github.com/skip2/go-qrcode"
 )
 
-// HandleLogin returns a connection and session-pointer.
+// handleLogin returns a connection and session-pointer.
 // If there is an error, the program will exit
-func HandleLogin() (whatsapp.Session, *whatsapp.Conn) {
+func handleLogin() (whatsapp.Session, *whatsapp.Conn) {
 	// Try to load a stored session for quick connection
 	savedSession := whatsapp.Session{}
 	savedData, err := ioutil.ReadFile(sessionFile)
 	if err == nil {
-		savedData = DecryptData(savedData)
+		savedData = decryptData(savedData)
 		err = json.Unmarshal(savedData, &savedSession)
 	}
 
@@ -53,7 +53,7 @@ func HandleLogin() (whatsapp.Session, *whatsapp.Conn) {
 		}
 		// Save new session to quickly start the next time
 		sessionJSON, _ := json.Marshal(sess)
-		sessionJSON = EncryptData(sessionJSON)
+		sessionJSON = encryptData(sessionJSON)
 		ioutil.WriteFile(sessionFile, sessionJSON, 0600)
 		fmt.Println("Session saved.")
 		scanChan <- true

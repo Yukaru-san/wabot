@@ -28,6 +28,7 @@ var (
 
 	startTime        = uint64(time.Now().Unix())
 	errorTimeout     = time.Minute * 1
+	enableAutosaving = true
 	autosaveInterval = time.Minute * 3
 
 	encrypKey        = []byte("r4gyXrWSPXzvpBZJ")
@@ -49,6 +50,11 @@ func SetEncryptionKey(key []byte) bool {
 
 	encrypKey = key
 	return true
+}
+
+// DeactivateAutoSaving disables automatic saving
+func DeactivateAutoSaving() {
+	enableAutosaving = false
 }
 
 // SetAutosaveInterval - interval of userdata saving
@@ -81,14 +87,14 @@ func StartBot(roomName string) (whatsapp.Session, *whatsapp.Conn) {
 	botname = roomName
 
 	// Login
-	session, conn = HandleLogin()
+	session, conn = handleLogin()
 
 	// Add the command handler
 	conn.AddHandler(cmd{})
 
 	// Saves in intervals
 	go (func() {
-		for {
+		for enableAutosaving {
 			time.Sleep(autosaveInterval)
 			SaveUsersToDisk()
 		}
@@ -142,11 +148,11 @@ func MessageToName(message whatsapp.TextMessage) string {
 		authorID = message.Info.RemoteJid // Personennamen
 	}
 
-	return jidToName(authorID)
+	return JidToName(authorID)
 }
 
-// Converts an ID to the corresponding name
-func jidToName(jid string) string {
+// JidToName converts an ID to the corresponding name
+func JidToName(jid string) string {
 	for _, c := range contacList {
 		if c.Jid == jid {
 			if c.Name == botname {
@@ -162,10 +168,8 @@ func jidToName(jid string) string {
 // NameToJid finds the corresponding Jid to a name
 // Returns {undefined} on error
 func NameToJid(name string) string {
-	botname = "Yukaru-Bot"
-
 	for _, c := range contacList {
-		if jidToName(c.Jid) == name {
+		if JidToName(c.Jid) == name {
 			return c.Jid
 		}
 	}

@@ -22,8 +22,8 @@ type BotUser struct {
 
 var standardSettings interface{}
 
-// AddUser adds a new member to the group and prepares a Settings struct for him
-func AddUser(user whatsapp.Contact) {
+// addUser adds a new member to the group and prepares a Settings struct for him
+func addUser(user whatsapp.Contact) {
 	users.BotUsers = append(users.BotUsers, &BotUser{Contact: user, Settings: standardSettings})
 }
 
@@ -42,7 +42,7 @@ func IsUserRegistered(jid string) bool {
 	return false
 }
 
-// AddUserByJid - AddUser alternative  // NOT WORKING RN
+// AddUserByJid - AddUser alternative
 func AddUserByJid(jid string) {
 	if !IsUserRegistered(jid) {
 		for _, c := range contacList {
@@ -52,16 +52,6 @@ func AddUserByJid(jid string) {
 			}
 		}
 	}
-}
-
-// DoesUserExist checks if the given jid exists in the user Array
-func DoesUserExist(jid string) bool {
-	for _, u := range users.BotUsers {
-		if u.Contact.Jid == jid {
-			return true
-		}
-	}
-	return false
 }
 
 // ChangeUserSettings a users settings
@@ -115,17 +105,16 @@ func GetUserIndex(message whatsapp.TextMessage) int {
 }
 
 // SaveUsersToDisk saves the BotUser-Slice
-func SaveUsersToDisk() {
+func SaveUsersToDisk() bool {
 	if len(users.BotUsers) > 0 {
 		usersJSON, _ := json.Marshal(users)
 
-		usersJSON = EncryptData(usersJSON)
+		usersJSON = encryptData(usersJSON)
 
 		ioutil.WriteFile(usersFile, usersJSON, 0600)
-		println("--- Users saved ---")
-	} else {
-		println("---Save failed, no entries---")
+		return true
 	}
+	return false
 }
 
 // GetSaveData returns the stored savedata
@@ -135,7 +124,7 @@ func GetSaveData() (BotUserList, bool) {
 
 	savedData, err := ioutil.ReadFile(usersFile)
 	if err == nil {
-		savedData = DecryptData(savedData)
+		savedData = decryptData(savedData)
 		err = json.Unmarshal(savedData, &savedUsers)
 		if err == nil {
 			return savedUsers, true
