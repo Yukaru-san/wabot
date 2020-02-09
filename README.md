@@ -33,7 +33,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Rhymen/go-whatsapp"
+	"github.com/Yukaru-san/go-whatsapp"
 	wabot "github.com/Yukaru-san/WhatsApp-GroupBot"
 )
 
