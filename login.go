@@ -55,7 +55,7 @@ func handleLogin() (whatsapp.Session, *whatsapp.Conn) {
 		sessionJSON, _ := json.Marshal(sess)
 		sessionJSON = encryptData(sessionJSON)
 		ioutil.WriteFile(sessionFile, sessionJSON, 0600)
-		fmt.Println("Session saved.")
+		fmt.Println("Session saved. No QR-Code needed during the next login!")
 		scanChan <- true
 		return sess, wac
 	}
@@ -69,7 +69,6 @@ func handleLogin() (whatsapp.Session, *whatsapp.Conn) {
 		os.Exit(0)
 	}
 
-	fmt.Println("Successfully logged in!")
 	return sess, wac
 }
 
