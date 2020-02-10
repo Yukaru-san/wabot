@@ -105,6 +105,7 @@ StartBot(string)                           // Initializes and starts the bot
 DisplayTextMessagesInConsole(bool)         // Toggle printing new messages on / off
 
 AddCommand(string, func())                 // If a message starts with the given string it executes the func
+SetDefaultTextHandleFunction(func())	   // Calls the given function if no command could be parsed
 SetImageHandler(func())                    // Executes the given function when receiving a image  
 SetStickerHandler(func())                  // Executes the given function when receiving a sticker  
 

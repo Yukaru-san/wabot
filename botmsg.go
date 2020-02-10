@@ -17,6 +17,7 @@ type Command struct {
 var commands []Command
 var imageHandleFunction func(whatsapp.ImageMessage)
 var stickerHandleFunction func(whatsapp.StickerMessage)
+var defaultTextHandleFunction func(whatsapp.TextMessage)
 
 // handleBotMsg checks if a message is a command and executes the first possible command
 func handleBotMsg(message whatsapp.TextMessage) {
@@ -27,6 +28,9 @@ func handleBotMsg(message whatsapp.TextMessage) {
 			break
 		}
 	}
+
+	// No command found? Try to run the default code
+	go defaultTextHandleFunction(message)
 }
 
 // WriteTextMessage sends a given string as text

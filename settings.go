@@ -18,7 +18,7 @@ type cmd struct{}
 */
 
 var (
-	botname        = "Yukaru-Bot"
+	botname        = ""
 	consoleWriteTo = ""
 
 	contacList []whatsapp.Contact
@@ -85,6 +85,11 @@ func SetStickerHandler(functionToExecute func(whatsapp.StickerMessage)) {
 	stickerHandleFunction = functionToExecute
 }
 
+// SetDefaultTextHandleFunction calls the given function when no commands have fit
+func SetDefaultTextHandleFunction(functionToExecute func(whatsapp.TextMessage)) {
+	defaultTextHandleFunction = functionToExecute
+}
+
 // DisplayTextMessagesInConsole toggles visibility in console
 func DisplayTextMessagesInConsole(display bool) {
 	showTextMessages = display
@@ -99,6 +104,7 @@ func StartBot(roomName string) (whatsapp.Session, *whatsapp.Conn) {
 	// Create empty functions to prevent crashing on img / sticker
 	SetImageHandler(func(whatsapp.ImageMessage) {})
 	SetStickerHandler(func(whatsapp.StickerMessage) {})
+	SetDefaultTextHandleFunction(func(whatsapp.TextMessage) {})
 
 	// Login
 	session, conn = handleLogin()
