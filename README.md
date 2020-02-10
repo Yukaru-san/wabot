@@ -102,7 +102,7 @@ Since the savable data is fully modular, at least the savedata-loading couldn't 
 
 ```go
 StartBot(string)                           // Initializes and starts the bot
-DisplayTextMessagesInConsole(bool          // Toggle printing new messages on / off
+DisplayTextMessagesInConsole(bool)         // Toggle printing new messages on / off
 
 AddCommand(string, func())                 // If a message starts with the given string it executes the func
 SetImageHandler(func())                    // Executes the given function when receiving a image  
