@@ -1,5 +1,5 @@
 # WhatsApp-GroupBot
-By emulating WhatsApp Web this bot allows you to easiely set up and use this highly customizable WhatsApp bot.  
+By emulating WhatsApp Web this library allows you to easiely set up and use this highly customizable WhatsApp bot.  
 Since customizability is the main focus of this project, you can create as many interactions as you want.
 There is also a feature to save specific informations (like settings) across users within the group.
 
