@@ -47,30 +47,58 @@ func WriteTextMessage(text string, remoteJid string) {
 	conn.Send(msg)
 }
 
-// SendImageMessageFromFile takes img type like "image/png"
-func SendImageMessageFromFile(img *os.File, imgType string, remoteJid string) {
-	// Create the struct
-	msg := whatsapp.ImageMessage{
-		Info: whatsapp.MessageInfo{
-			RemoteJid: remoteJid,
-		},
-		Type:    "image/png",
-		Content: img,
-	}
+// SendImageMessageFromFile takes img type like "image/png" / If caption len is 0 there won't be a text
+func SendImageMessageFromFile(caption string, img *os.File, imgType string, remoteJid string) {
 
+	var msg whatsapp.ImageMessage
+
+	if len(caption) > 0 {
+		// Create the struct
+		msg = whatsapp.ImageMessage{
+			Info: whatsapp.MessageInfo{
+				RemoteJid: remoteJid,
+			},
+			Caption: caption,
+			Type:    imgType,
+			Content: img,
+		}
+	} else {
+		// Create the struct
+		msg = whatsapp.ImageMessage{
+			Info: whatsapp.MessageInfo{
+				RemoteJid: remoteJid,
+			},
+			Type:    imgType,
+			Content: img,
+		}
+	}
 	// And send it
 	conn.Send(msg)
 }
 
-// SendImageMessage takes img type like "image/png"
-func SendImageMessage(img io.Reader, imgType string, remoteJid string) {
-	// Create the struct
-	msg := whatsapp.ImageMessage{
-		Info: whatsapp.MessageInfo{
-			RemoteJid: remoteJid,
-		},
-		Type:    "image/png",
-		Content: img,
+// SendImageMessage takes img type like "image/png"  / If caption len is 0 there won't be a text
+func SendImageMessage(caption string, img io.Reader, imgType string, remoteJid string) {
+	var msg whatsapp.ImageMessage
+
+	if len(caption) > 0 {
+		// Create the struct
+		msg = whatsapp.ImageMessage{
+			Info: whatsapp.MessageInfo{
+				RemoteJid: remoteJid,
+			},
+			Caption: caption,
+			Type:    imgType,
+			Content: img,
+		}
+	} else {
+		// Create the struct
+		msg = whatsapp.ImageMessage{
+			Info: whatsapp.MessageInfo{
+				RemoteJid: remoteJid,
+			},
+			Type:    imgType,
+			Content: img,
+		}
 	}
 
 	// And send it
