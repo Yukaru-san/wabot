@@ -1,6 +1,7 @@
 package wabot
 
 import (
+	"io"
 	"os"
 	"strings"
 
@@ -46,8 +47,23 @@ func WriteTextMessage(text string, remoteJid string) {
 	conn.Send(msg)
 }
 
+// SendImageMessageFromFile takes img type like "image/png"
+func SendImageMessageFromFile(img *os.File, imgType string, remoteJid string) {
+	// Create the struct
+	msg := whatsapp.ImageMessage{
+		Info: whatsapp.MessageInfo{
+			RemoteJid: remoteJid,
+		},
+		Type:    "image/png",
+		Content: img,
+	}
+
+	// And send it
+	conn.Send(msg)
+}
+
 // SendImageMessage takes img type like "image/png"
-func SendImageMessage(img *os.File, imgType string, remoteJid string) {
+func SendImageMessage(img io.Reader, imgType string, remoteJid string) {
 	// Create the struct
 	msg := whatsapp.ImageMessage{
 		Info: whatsapp.MessageInfo{
