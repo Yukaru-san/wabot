@@ -1,7 +1,9 @@
 package wabot
 
 import (
+	"bytes"
 	"io"
+	"io/ioutil"
 	"os"
 	"strings"
 
@@ -47,48 +49,26 @@ func WriteTextMessage(text string, remoteJid string) {
 	conn.Send(msg)
 }
 
-// SendImageMessageFromFile takes img type like "image/png" / If caption len is 0 there won't be a text
-func SendImageMessageFromFile(caption string, img *os.File, imgType string, remoteJid string) {
-
-	var msg whatsapp.ImageMessage
-
-	if len(caption) > 0 {
-		// Create the struct
-		msg = whatsapp.ImageMessage{
-			Info: whatsapp.MessageInfo{
-				RemoteJid: remoteJid,
-			},
-			Caption: caption,
-			Type:    imgType,
-			Content: img,
-		}
-	} else {
-		// Create the struct
-		msg = whatsapp.ImageMessage{
-			Info: whatsapp.MessageInfo{
-				RemoteJid: remoteJid,
-			},
-			Type:    imgType,
-			Content: img,
-		}
-	}
-	// And send it
-	conn.Send(msg)
-}
-
 // SendImageMessage takes img type like "image/png"  / If caption len is 0 there won't be a text
 func SendImageMessage(caption string, img io.Reader, imgType string, remoteJid string) {
 	var msg whatsapp.ImageMessage
 
+	// Create a Thumbnail
+	var buffer bytes.Buffer
+	tee := io.TeeReader(img, &buffer)
+
+	thumbnail, _ := ioutil.ReadAll(&buffer)
+
 	if len(caption) > 0 {
 		// Create the struct
 		msg = whatsapp.ImageMessage{
 			Info: whatsapp.MessageInfo{
 				RemoteJid: remoteJid,
 			},
-			Caption: caption,
-			Type:    imgType,
-			Content: img,
+			Caption:   caption,
+			Type:      imgType,
+			Content:   tee,
+			Thumbnail: thumbnail,
 		}
 	} else {
 		// Create the struct
@@ -96,8 +76,9 @@ func SendImageMessage(caption string, img io.Reader, imgType string, remoteJid s
 			Info: whatsapp.MessageInfo{
 				RemoteJid: remoteJid,
 			},
-			Type:    imgType,
-			Content: img,
+			Type:      imgType,
+			Content:   tee,
+			Thumbnail: thumbnail,
 		}
 	}
 
