@@ -19,12 +19,7 @@ go get github.com/Yukaru-san/WhatsApp-GroupBot
 ```
 
 # Usage
-To use this bot you mainly need these two functions
-```go
-wabot.StartBot()    // Initializes and starts the bot
-wabot.AddCommand()  // Add unlimited amount of commands
-```
-but since this is a bit on the short side, here is an example of a working program:
+Using this bot should be pretty easy as soon as you know what you want to accomplish. Here is an example of a working program:
 ```go
 package main
 
