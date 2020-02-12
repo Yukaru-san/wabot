@@ -96,7 +96,7 @@ func main() {
 }
 
 ```
-Since the savable data is fully modular, at least the savedata-loading couldn't be included within the library. Therefore it has to be done inside of your own code. As long as you keep the name "Settings" you can use this exact loading part for more-or-less any other project. Also, for any aditional information regarding the struct "whatsapp.TextMessage" refer to This site was built using [Rhymen's Github page](https://github.com/Rhymen/go-whatsapp) - it is quite self-explanatory though. A message's text is stored in ***message.Text***
+Since the savable data is fully modular, at least the savedata-loading couldn't be included within the library. Therefore it has to be done inside of your own code. As long as you keep the name "Settings" you can use this exact loading part for more-or-less any other project. Also, for any aditional information regarding the struct "whatsapp.TextMessage" refer to [Rhymen's Github page](https://github.com/Rhymen/go-whatsapp) - it is quite self-explanatory though. A message's text is stored in ***message.Text***
 
 # Functions
 
