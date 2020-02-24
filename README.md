@@ -6,7 +6,7 @@ There is also a feature to save specific informations (like settings) across use
 *There is just one small problem*                                                                                      
 Since there can be only one instance of WhatsApp Web at a time, the bot will pause when you open another instance               (e.g. in your browser tab)        
 The bot will reconnect after a given amount of time (defined in *SetErrorTimeout()*) and therefore kick you out of your
-other instance. Obviously, commands during this time-out won't have any effect and sadly, the only way arount it, is completly denying another instance of WhatsApp Web being opened.                                                                       
+other instance. Obviously, commands during this time-out won't have any effect and sadly, the only way around it, is completly denying another instance of WhatsApp Web being opened.                                                                       
 If you wish to do so, just set the ErrorTimeout to something like 100
 
 # Installation
