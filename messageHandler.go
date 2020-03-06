@@ -17,6 +17,7 @@ func (messageHandler) HandleError(err error) {
 		println("Another instance of Whatsapp Web has been opened. Waiting to try again...")
 		time.Sleep(errorTimeout)
 		session, conn = handleLogin()
+		println("Connected again!")
 	}
 }
 

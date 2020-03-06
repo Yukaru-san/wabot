@@ -52,6 +52,16 @@ func SetEncryptionKey(key []byte) bool {
 	return true
 }
 
+// SetSessionFilePath changes the name a file should be saved in ([folder/]filename)
+func SetSessionFilePath(path string) {
+	sessionFile = path
+}
+
+// SetUsersFilePath changes the location the users will be saved in ([folder/]filename)
+func SetUsersFilePath(path string) {
+	usersFile = path
+}
+
 // DeactivateAutoSaving disables automatic saving
 func DeactivateAutoSaving() {
 	enableAutosaving = false
