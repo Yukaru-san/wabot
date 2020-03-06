@@ -62,6 +62,11 @@ func SetUsersFilePath(path string) {
 	usersFile = path
 }
 
+// SetQRFilePath changes the location the users will be saved in ([folder/]filename)
+func SetQRFilePath(path string) {
+	qrCodeFile = path
+}
+
 // DeactivateAutoSaving disables automatic saving
 func DeactivateAutoSaving() {
 	enableAutosaving = false
