@@ -6,7 +6,7 @@ There is also a feature to save specific informations (like settings) across use
 *There is just one small problem*                                                                                      
 Since there can be only one instance of WhatsApp Web at a time, the bot will pause when you open another instance               (e.g. in your browser tab)        
 The bot will reconnect after a given amount of time (defined in *SetErrorTimeout()*) and therefore kick you out of your
-other instance. Obviously, commands during this time-out won't have any effect and sadly, the only way arount it, is completly denying another instance of WhatsApp Web being opened.                                                                       
+other instance. Obviously, commands during this time-out won't have any effect and sadly, the only way around it, is completly denying another instance of WhatsApp Web being opened.                                                                       
 If you wish to do so, just set the ErrorTimeout to something like 100
 
 # Installation
@@ -19,12 +19,7 @@ go get github.com/Yukaru-san/WhatsApp-GroupBot
 ```
 
 # Usage
-To use this bot you mainly need these two functions
-```go
-wabot.StartBot()    // Initializes and starts the bot
-wabot.AddCommand()  // Add unlimited amount of commands
-```
-but since this is a bit on the short side, here is an example of a working program:
+Using this bot should be pretty easy as soon as you know what you want to accomplish. Here is an example of a working program:
 ```go
 package main
 
@@ -96,7 +91,7 @@ func main() {
 }
 
 ```
-Since the savable data is fully modular, at least the savedata-loading couldn't be included within the library. Therefore it has to be done inside of your own code. As long as you keep the name "Settings" you can use this exact loading part for more-or-less any other project. Also, for any aditional information regarding the struct "whatsapp.TextMessage" refer to This site was built using [Rhymen's Github page](https://github.com/Rhymen/go-whatsapp) - it is quite self-explanatory though. A message's text is stored in ***message.Text***
+Since the savable data is fully modular, at least the savedata-loading couldn't be included within the library. Therefore it has to be done inside of your own code. As long as you keep the name "Settings" you can use this exact loading part for more-or-less any other project. Also, for any aditional information regarding the struct "whatsapp.TextMessage" refer to [Rhymen's Github page](https://github.com/Rhymen/go-whatsapp) - it is quite self-explanatory though. A message's text is stored in ***message.Text***
 
 # Functions
 
