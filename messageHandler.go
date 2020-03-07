@@ -23,6 +23,7 @@ func (messageHandler) HandleError(err error) {
 		// Reconnect after a given amount of time
 		println("Another instance of Whatsapp Web has been opened. Waiting to try again...")
 		time.Sleep(errorTimeout)
+		conn = nil
 		session, conn = handleLogin()
 		println("Connected again!")
 	}

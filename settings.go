@@ -33,6 +33,7 @@ var (
 
 	encrypKey        = []byte("r4gyXrWSPXzvpBZJ")
 	showTextMessages = true
+	useContactName   = false
 
 	qrCodeFile      = "qr.png"
 	sessionFile     = "storedSession.dat"
@@ -65,6 +66,11 @@ func SetUsersFilePath(path string) {
 // SetQRFilePath changes the location the users will be saved in ([folder/]filename)
 func SetQRFilePath(path string) {
 	qrCodeFile = path
+}
+
+// UseContactNames tells the bot to use names saved in contacts (or not)
+func UseContactNames(use bool) {
+	useContactName = use
 }
 
 // DeactivateAutoSaving disables automatic saving
@@ -175,18 +181,26 @@ func MessageToName(message whatsapp.TextMessage) string {
 
 	authorID := ""
 
-	if len(message.Info.Source.GetPushName()) > 0 {
+	// Try to find the right name
+	if !useContactName && message.Info.Source.Participant != nil {
+		return *message.Info.Source.Participant
+	} else if len(message.Info.Source.GetPushName()) > 0 {
 		return message.Info.Source.GetPushName()
-	} else if message.Info.Source.Participant != nil {
-		authorID = *message.Info.Source.Participant
 	} else {
 		authorID = message.Info.RemoteJid // Personennamen
 	}
 
-	return JidToName(authorID)
+	authorID = JidToName(authorID)
+
+	// Return the custom name if there is none in the contacts
+	if len(authorID) < 2 {
+		return *message.Info.Source.Participant
+	}
+
+	return authorID
 }
 
-// JidToName converts an ID to the corresponding name
+// JidToName converts an ID to the corresponding contact's name if possible
 func JidToName(jid string) string {
 	for _, c := range contacList {
 		if c.Jid == jid {
