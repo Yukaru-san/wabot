@@ -65,7 +65,7 @@ func handleLogin() (whatsapp.Session, *whatsapp.Conn) {
 	sess, err := wac.RestoreWithSession(savedSession)
 
 	if err != nil {
-		fmt.Println("Error! Exiting...")
+		fmt.Printf("Error connecting to WhatsApp%s", err.Error())
 		os.Exit(0)
 	}
 

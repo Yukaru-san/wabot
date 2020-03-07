@@ -2,6 +2,7 @@ package wabot
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -13,6 +14,12 @@ type messageHandler struct{}
 // Mainly caused by another instance of Whatsapp Web being opened
 func (messageHandler) HandleError(err error) {
 	if strings.Contains(err.Error(), "closed") {
+
+		if errorTimeout == -1 {
+			println("Exit due to connection break")
+			os.Exit(0)
+		}
+
 		// Reconnect after a given amount of time
 		println("Another instance of Whatsapp Web has been opened. Waiting to try again...")
 		time.Sleep(errorTimeout)
