@@ -182,19 +182,22 @@ func MessageToName(message whatsapp.TextMessage) string {
 	authorID := ""
 
 	// Try to find the right name
-	if !useContactName && message.Info.Source.Participant != nil {
+
+	if !useContactName && len(conn.Info.Pushname) > 0 {
+		return conn.Info.Pushname
+	} else if message.Info.Source.Participant != nil {
 		return *message.Info.Source.Participant
 	} else if len(message.Info.Source.GetPushName()) > 0 {
 		return message.Info.Source.GetPushName()
 	} else {
-		authorID = message.Info.RemoteJid // Personennamen
+		authorID = message.Info.RemoteJid
 	}
 
 	authorID = JidToName(authorID)
 
 	// Return the custom name if there is none in the contacts
 	if len(authorID) < 2 {
-		return *message.Info.Source.Participant
+		return conn.Info.Pushname
 	}
 
 	return authorID
