@@ -2,6 +2,7 @@ package wabot
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/Yukaru-san/go-whatsapp"
@@ -34,6 +35,7 @@ var (
 	encrypKey        = []byte("r4gyXrWSPXzvpBZJ")
 	showTextMessages = true
 	useContactName   = false
+	useNicknames     = true
 
 	qrCodeFile      = "qr.png"
 	sessionFile     = "storedSession.dat"
@@ -179,31 +181,28 @@ func MessageToJid(message whatsapp.TextMessage) string {
 // -> allows finding the name in groups
 func MessageToName(message whatsapp.TextMessage) string {
 
-	authorID := ""
-
 	// Try to find the right name
+	participantNumber := strings.Split(MessageToJid(message), "@")[0]
+	userNickname := GetUserNickname(MessageToJid(message))
 
-	if !useContactName && len(conn.Info.Pushname) > 0 {
-		return conn.Info.Pushname
-	} else if message.Info.Source.Participant != nil {
-		return *message.Info.Source.Participant
-	} else if len(message.Info.Source.GetPushName()) > 0 {
-		return message.Info.Source.GetPushName()
-	} else {
-		authorID = message.Info.RemoteJid
+	// Return if desired
+	if useNicknames && len(userNickname) > 0 {
+		return userNickname
+	} else if !useContactName && message.Info.Source.Participant != nil {
+		return participantNumber
 	}
 
-	authorID = JidToName(authorID)
+	authorName := JidToName(message.Info.RemoteJid)
 
 	// Return the custom name if there is none in the contacts
-	if len(authorID) < 2 {
-		return conn.Info.Pushname
+	if len(authorName) < 2 {
+		return participantNumber
 	}
 
-	return authorID
+	return authorName
 }
 
-// JidToName converts an ID to the corresponding contact's name if possible
+// JidToName returns a corresponding contact's name. In general, you want to use MessageToName() instead
 func JidToName(jid string) string {
 	for _, c := range contacList {
 		if c.Jid == jid {
@@ -228,4 +227,9 @@ func NameToJid(name string) string {
 
 	return "{undefined}"
 
+}
+
+// SetNicknameUseage changes the users abbility to use nicknames (true by default)
+func SetNicknameUseage() {
+	useNicknames = false
 }
