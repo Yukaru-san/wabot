@@ -35,7 +35,9 @@ var (
 	encrypKey        = []byte("r4gyXrWSPXzvpBZJ")
 	showTextMessages = true
 	useContactName   = false
-	useNicknames     = true
+
+	useNicknames       = false
+	nicknameUpdateText = "Your nickname has been updated!"
 
 	qrCodeFile      = "qr.png"
 	sessionFile     = "storedSession.dat"
@@ -229,7 +231,8 @@ func NameToJid(name string) string {
 
 }
 
-// SetNicknameUseage changes the users abbility to use nicknames (true by default)
-func SetNicknameUseage() {
+// SetNicknameUseage changes the users abbility to use nicknames (true by default) - string will be the output. "" for no output
+func SetNicknameUseage(output string) {
 	useNicknames = false
+	nicknameUpdateText = output
 }
