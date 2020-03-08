@@ -48,6 +48,16 @@ func SetUserNickname(jid string, nickname string) {
 	for _, u := range users.BotUsers {
 		if u.Contact.Jid == jid {
 			u.Nickname = nickname
+			return
+		}
+	}
+
+	// User isn't registered yet. Do it now!
+	AddUserByJid(jid)
+	// Return the settings
+	for _, u := range users.BotUsers {
+		if u.Contact.Jid == jid {
+			u.Nickname = nickname
 		}
 	}
 }

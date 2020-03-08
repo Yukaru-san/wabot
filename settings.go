@@ -188,6 +188,7 @@ func MessageToName(message whatsapp.TextMessage) string {
 	userNickname := GetUserNickname(MessageToJid(message))
 
 	// Return if desired
+	println(userNickname)
 	if useNicknames && len(userNickname) > 0 {
 		return userNickname
 	} else if !useContactName && message.Info.Source.Participant != nil {

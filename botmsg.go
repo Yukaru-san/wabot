@@ -34,7 +34,7 @@ func handleBotMsg(message whatsapp.TextMessage) {
 
 	// Predefined function that can be turned off
 	if useNicknames && strings.HasPrefix(strings.ToLower(message.Text), "/nick") && len(message.Text) > 7 {
-		SetUserNickname(MessageToJid(message), message.Text[:6])
+		SetUserNickname(MessageToJid(message), message.Text[6:])
 		if len(nicknameUpdateText) > 0 {
 			WriteTextMessage(nicknameUpdateText, MessageToJid(message))
 		}
