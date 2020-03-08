@@ -232,7 +232,7 @@ func NameToJid(name string) string {
 }
 
 // SetNicknameUseage changes the users abbility to use nicknames (false by default) - string will be the output. "" for no output
-func SetNicknameUseage(useNicknames bool, output string) {
-	useNicknames = useNicknames
+func SetNicknameUseage(allowNicknames bool, output string) {
+	useNicknames = allowNicknames
 	nicknameUpdateText = output
 }
