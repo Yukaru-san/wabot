@@ -31,7 +31,8 @@ func (messageHandler) HandleError(err error) {
 
 func (messageHandler) HandleTextMessage(message whatsapp.TextMessage) {
 
-	if message.Info.Timestamp > startTime && JidToName(message.Info.RemoteJid) == conn.Info.Pushname {
+	//	if message.Info.Timestamp > startTime && JidToName(message.Info.RemoteJid) == conn.Info.Pushname { TODO Only specific groups
+	if message.Info.Timestamp > startTime {
 		go handleBotMsg(message)
 
 		if showTextMessages {

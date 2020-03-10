@@ -122,9 +122,10 @@ func DisplayTextMessagesInConsole(display bool) {
 
 // StartBot initiates and starts the bot
 // - Takes in the name of the group to be run in
-func StartBot(roomName string) (whatsapp.Session, *whatsapp.Conn) {
+// func StartBot(roomName string) (whatsapp.Session, *whatsapp.Conn) { TODO Only speficied groups
+func StartBot() (whatsapp.Session, *whatsapp.Conn) {
 	// Self identification
-	botname = roomName
+	//	botname = roomName
 
 	// Create empty functions to prevent crashing on img / sticker
 	SetImageHandler(func(whatsapp.ImageMessage) {})
