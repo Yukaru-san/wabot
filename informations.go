@@ -71,8 +71,8 @@ func GetPhoneNumber() string {
 	return strings.Split(conn.Info.Wid, "@")[0]
 }
 
-// GetGroupName returns a group's name according to the jid
-func GetGroupName(jid string) string {
+// JidToGroupName returns a group's name according to the jid
+func JidToGroupName(jid string) string {
 
 	// If only a group's jid was given
 	if !strings.Contains(jid, "-") {

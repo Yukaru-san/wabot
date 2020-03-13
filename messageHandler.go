@@ -42,7 +42,7 @@ func (messageHandler) HandleTextMessage(message whatsapp.TextMessage) {
 		go handleBotMsg(message)
 
 		if showTextMessages {
-			fmt.Printf("%s: %s\n", MessageToJid(message), message.Text)
+			fmt.Printf("%s: %s\n", JidToGroupName(message.Info.RemoteJid), message.Text)
 		}
 	}
 }
