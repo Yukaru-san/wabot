@@ -19,17 +19,21 @@ type messageHandler struct{}
 
 // Mainly caused by another instance of Whatsapp Web being opened
 func (messageHandler) HandleError(err error) {
-	if errorTimeout == -1 && !strings.Contains(err.Error(), "error processing data") {
-		fmt.Printf("Exit due to connection break. Error:%s\n", err.Error())
-		os.Exit(0)
-	}
 
-	// Reconnect after a given amount of time
-	fmt.Printf("WhatsApp crashed. With the following Message:\n%s\nTrying again in: %d\n", err.Error(), errorTimeout)
-	time.Sleep(errorTimeout)
-	conn.Disconnect()
-	session, conn = handleLogin()
-	fmt.Println("--- Connected again! ---")
+	if !strings.Contains(err.Error(), "error processing data") {
+
+		if errorTimeout == -1 {
+			fmt.Printf("Exit due to connection break. Error:%s\n", err.Error())
+			os.Exit(0)
+		}
+
+		// Reconnect after a given amount of time
+		fmt.Printf("WhatsApp crashed with the following Message:\n%s\nTrying again in: %d\n", err.Error(), errorTimeout)
+		time.Sleep(errorTimeout)
+		conn.Disconnect()
+		session, conn = handleLogin()
+		fmt.Println("--- Connected again! ---")
+	}
 }
 
 func (messageHandler) HandleTextMessage(message whatsapp.TextMessage) {
