@@ -13,36 +13,32 @@ type messageHandler struct{}
 
 // Mainly caused by another instance of Whatsapp Web being opened
 func (messageHandler) HandleError(err error) {
-	if strings.Contains(err.Error(), "closed") {
-
-		if errorTimeout == -1 {
-			println("Exit due to connection break")
-			os.Exit(0)
-		}
-
-		// Reconnect after a given amount of time
-		println("Another instance of Whatsapp Web has been opened. Waiting to try again...")
-		time.Sleep(errorTimeout)
-		conn = nil
-		session, conn = handleLogin()
-		println("Connected again!")
+	if errorTimeout == -1 {
+		fmt.Println("Exit due to connection break")
+		os.Exit(0)
 	}
+
+	// Reconnect after a given amount of time
+	fmt.Printf("WhatsApp crashed. With the following Message:\n%s\nTrying again in: %d\n", err.Error(), errorTimeout)
+	time.Sleep(errorTimeout)
+	conn.Disconnect()
+	session, conn = handleLogin()
+	fmt.Println("--- Connected again! ---")
 }
 
 func (messageHandler) HandleTextMessage(message whatsapp.TextMessage) {
 
-	//	if message.Info.Timestamp > startTime && JidToName(message.Info.RemoteJid) == conn.Info.Pushname { TODO Only specific groups
 	if message.Info.Timestamp > startTime {
 		go handleBotMsg(message)
 
 		if showTextMessages {
-			println(fmt.Sprintf("%s: %s", JidToName(MessageToJid(message)), message.Text))
+			fmt.Printf("%s: %s\n", MessageToJid(message), message.Text)
 		}
 	}
 }
 
 func (messageHandler) HandleImageMessage(message whatsapp.ImageMessage) {
-	if message.Info.Timestamp > startTime && JidToName(message.Info.RemoteJid) == conn.Info.Pushname {
+	if message.Info.Timestamp > startTime {
 		go imageHandleFunction(message)
 	}
 }
@@ -64,7 +60,7 @@ func (messageHandler) HandleJSONMessage(message string) {
 }
 
 func (messageHandler) HandleStickerMessage(message whatsapp.StickerMessage) {
-	if message.Info.Timestamp > startTime && JidToName(message.Info.RemoteJid) == conn.Info.Pushname && strings.Contains(message.Info.Source.Message.String(), "url:") {
+	if message.Info.Timestamp > startTime && strings.Contains(message.Info.Source.Message.String(), "url:") {
 		go stickerHandleFunction(message)
 	}
 }

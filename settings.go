@@ -2,7 +2,6 @@ package wabot
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/Yukaru-san/go-whatsapp"
@@ -19,13 +18,15 @@ type cmd struct{}
 */
 
 var (
-	botname        = ""
 	consoleWriteTo = ""
 
 	contacList []whatsapp.Contact
 
 	session whatsapp.Session
 	conn    *whatsapp.Conn
+
+	longConnName  = "Whatsapp-GroupBot"
+	shortConnName = "wabot"
 
 	startTime        = uint64(time.Now().Unix())
 	errorTimeout     = time.Minute * 1
@@ -120,40 +121,6 @@ func DisplayTextMessagesInConsole(display bool) {
 	showTextMessages = display
 }
 
-// StartBot initiates and starts the bot
-// - Takes in the name of the group to be run in
-// func StartBot(roomName string) (whatsapp.Session, *whatsapp.Conn) { TODO Only speficied groups
-func StartBot() (whatsapp.Session, *whatsapp.Conn) {
-	// Self identification
-	//	botname = roomName
-
-	// Create empty functions to prevent crashing on img / sticker
-	SetImageHandler(func(whatsapp.ImageMessage) {})
-	SetStickerHandler(func(whatsapp.StickerMessage) {})
-	SetDefaultTextHandleFunction(func(whatsapp.TextMessage) {})
-
-	// Login
-	session, conn = handleLogin()
-
-	// Add the command handler
-	conn.AddHandler(cmd{})
-
-	// Saves in intervals
-	go (func() {
-		for enableAutosaving {
-			time.Sleep(autosaveInterval)
-			SaveUsersToDisk()
-		}
-	})()
-	//
-	// Add the message handler
-	go (func() {
-		conn.AddHandler(messageHandler{})
-	})()
-
-	return session, conn
-}
-
 // HandleError prints potential errors
 func (cmd) HandleError(err error) {
 	fmt.Println(err.Error())
@@ -164,73 +131,6 @@ func (cmd) HandleContactList(contacts []whatsapp.Contact) {
 	for _, c := range contacts {
 		contacList = append(contacts, c)
 	}
-}
-
-// MessageToJid find the right Jid in a message
-func MessageToJid(message whatsapp.TextMessage) string {
-
-	authorID := ""
-
-	if message.Info.Source.Participant != nil {
-		authorID = *message.Info.Source.Participant
-	} else {
-		authorID = message.Info.RemoteJid // Personennamen
-	}
-
-	return authorID
-}
-
-// MessageToName Converts and entire message to the corresponding name
-// -> allows finding the name in groups
-func MessageToName(message whatsapp.TextMessage) string {
-
-	// Try to find the right name
-	participantNumber := strings.Split(MessageToJid(message), "@")[0]
-	userNickname := GetUserNickname(MessageToJid(message))
-
-	// Return if desired
-	println(userNickname)
-	if useNicknames && len(userNickname) > 0 {
-		return userNickname
-	} else if !useContactName && message.Info.Source.Participant != nil {
-		return participantNumber
-	}
-
-	authorName := JidToName(message.Info.RemoteJid)
-
-	// Return the custom name if there is none in the contacts
-	if len(authorName) < 2 {
-		return participantNumber
-	}
-
-	return authorName
-}
-
-// JidToName returns a corresponding contact's name. In general, you want to use MessageToName() instead
-func JidToName(jid string) string {
-	for _, c := range contacList {
-		if c.Jid == jid {
-			if c.Name == botname {
-				return conn.Info.Pushname
-			}
-
-			return c.Name
-		}
-	}
-	return "{undefined}"
-}
-
-// NameToJid finds the corresponding Jid to a name
-// Returns {undefined} on error
-func NameToJid(name string) string {
-	for _, c := range contacList {
-		if JidToName(c.Jid) == name {
-			return c.Jid
-		}
-	}
-
-	return "{undefined}"
-
 }
 
 // SetNicknameUseage changes the users abbility to use nicknames (false by default) - string will be the output. "" for no output
