@@ -2,6 +2,7 @@ package wabot
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -13,6 +14,7 @@ import (
 // Command struct
 type Command struct {
 	prefix   string
+	groups   []string
 	function func(whatsapp.TextMessage)
 }
 
@@ -26,7 +28,8 @@ var defaultTextHandleFunction func(whatsapp.TextMessage)
 func handleBotMsg(message whatsapp.TextMessage) {
 	// Run through command list and execute if possible
 	for i := 0; i < len(commands); i++ {
-		if strings.HasPrefix(strings.ToLower(message.Text), strings.ToLower(commands[i].prefix)) {
+		// if no groups set || group is set && command is right
+		if (len(commands[i].groups) == 0 || arrayContains(commands[i].groups, fmt.Sprintf("%s@%s@g.us", GetPhoneNumber(), MessageToGroupID(message)))) && strings.HasPrefix(strings.ToLower(message.Text), strings.ToLower(commands[i].prefix)) {
 			go commands[i].function(message)
 			break
 		}
@@ -42,6 +45,16 @@ func handleBotMsg(message whatsapp.TextMessage) {
 
 	// No command found? Try to run the default code
 	go defaultTextHandleFunction(message)
+}
+
+func arrayContains(array []string, group string) bool {
+	for _, a := range array {
+		if a == group {
+			return true
+		}
+	}
+
+	return false
 }
 
 // WriteTextMessage sends a given string as text

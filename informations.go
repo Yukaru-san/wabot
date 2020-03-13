@@ -45,6 +45,26 @@ func MessageToName(message whatsapp.TextMessage) string {
 	return authorName
 }
 
+// MessageToGroupID returns the jid of a group. If the message is from outside a group it returns ""
+func MessageToGroupID(message whatsapp.TextMessage) string {
+
+	if message.Info.Source.Participant != nil {
+		return strings.Split(MessageToJid(message), "@")[1]
+	}
+
+	// Message is from outside a group
+	return ""
+}
+
+// GetPhoneNumber returns a bots phone number
+func GetPhoneNumber() string {
+
+	// Try to find the right name
+	return strings.Split(conn.Info.Wid, "@")[0]
+}
+
+// ----------------------------------------------------------------------------------------------------- //
+
 // JidToName returns a corresponding contact's name. In general, you want to use MessageToName() instead
 func JidToName(jid string) string {
 	for _, c := range contacList {
@@ -64,5 +84,4 @@ func NameToJid(name string) string {
 	}
 
 	return "{undefined}"
-
 }

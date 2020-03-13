@@ -94,11 +94,14 @@ func SetErrorTimeout(timeout time.Duration) {
 	errorTimeout = timeout
 }
 
-// AddTextCommand add a comand the program will listen to
-// Inputs will be determined by their prefix
-// - Always requires a function to take whatsapp.TextMessage as parameter
-func AddTextCommand(cmd string, functionToExecute func(whatsapp.TextMessage)) { // TODO implement another checking method
+// AddTextCommand adds a command that only works in all groups
+func AddTextCommand(cmd string, functionToExecute func(whatsapp.TextMessage)) {
 	commands = append(commands, Command{prefix: cmd, function: functionToExecute})
+}
+
+// AddGroupCommand adds a command that only works on certain groups
+func AddGroupCommand(cmd string, groupsToWorkIn []string, functionToExecute func(whatsapp.TextMessage)) {
+	commands = append(commands, Command{prefix: cmd, groups: groupsToWorkIn, function: functionToExecute})
 }
 
 // SetImageHandler calls the given function when receiving an img
