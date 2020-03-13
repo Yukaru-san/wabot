@@ -14,7 +14,7 @@ type messageHandler struct{}
 // Mainly caused by another instance of Whatsapp Web being opened
 func (messageHandler) HandleError(err error) {
 	if errorTimeout == -1 {
-		fmt.Println("Exit due to connection break")
+		fmt.Printf("Exit due to connection break. Error:%s\n", err.Error())
 		os.Exit(0)
 	}
 
