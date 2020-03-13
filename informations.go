@@ -1,6 +1,7 @@
 package wabot
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/Yukaru-san/go-whatsapp"
@@ -28,14 +29,16 @@ func MessageToName(message whatsapp.TextMessage) string {
 	participantNumber := strings.Split(MessageToJid(message), "@")[0]
 	userNickname := GetUserNickname(MessageToJid(message))
 
+	authorName := JidToName(message.Info.RemoteJid)
+
+	fmt.Printf("---------\nNumber: %s\nNickname: %s\nAuthor: %s\n", participantNumber, userNickname, authorName)
+
 	// Return if desired
 	if useNicknames && len(userNickname) > 0 {
 		return userNickname
 	} else if !useContactName && message.Info.Source.Participant != nil {
 		return participantNumber
 	}
-
-	authorName := JidToName(message.Info.RemoteJid)
 
 	// Return the custom name if there is none in the contacts
 	if len(authorName) < 2 {
@@ -48,8 +51,14 @@ func MessageToName(message whatsapp.TextMessage) string {
 // MessageToGroupID returns the jid of a group. If the message is from outside a group it returns ""
 func MessageToGroupID(message whatsapp.TextMessage) string {
 
-	if message.Info.Source.Participant != nil {
-		return strings.Split(MessageToJid(message), "@")[1]
+	jid := MessageToJid(message)
+
+	groupID := strings.Split(jid, "-")[1]
+
+	fmt.Println("MessageToName: ", MessageToName(message))
+
+	if jid != groupID {
+		return groupID
 	}
 
 	// Message is from outside a group
@@ -63,9 +72,21 @@ func GetPhoneNumber() string {
 	return strings.Split(conn.Info.Wid, "@")[0]
 }
 
+// GetGroupName returns a group's name according to the jid
+func GetGroupName(jid string) string {
+
+	// If only a group's jid was given
+	if !strings.Contains(jid, "-") {
+		jid = fmt.Sprintf("%s-%s", GetPhoneNumber(), jid)
+	}
+
+	// Return the right name
+	return JidToName(jid)
+}
+
 // ----------------------------------------------------------------------------------------------------- //
 
-// JidToName returns a corresponding contact's name. In general, you want to use MessageToName() instead
+// JidToName returns a corresponding contact or group's name.
 func JidToName(jid string) string {
 	for _, c := range contacList {
 		if c.Jid == jid {

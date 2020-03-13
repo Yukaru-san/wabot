@@ -27,12 +27,12 @@ var defaultTextHandleFunction func(whatsapp.TextMessage)
 // handleBotMsg checks if a message is a command and executes the first possible command
 func handleBotMsg(message whatsapp.TextMessage) {
 
-	fmt.Printf("Received: %s\n - from Group:%s\n", message.Text, fmt.Sprintf("%s@%s@g.us", GetPhoneNumber(), MessageToGroupID(message)))
+	fmt.Printf("Received: %s\n - from Group:%s\n", message.Text, fmt.Sprintf("%s-%s", GetPhoneNumber(), MessageToGroupID(message)))
 
 	// Run through command list and execute if possible
 	for i := 0; i < len(commands); i++ {
 		// if no groups set || group is set && command is right
-		if (len(commands[i].groups) == 0 || arrayContains(commands[i].groups, fmt.Sprintf("%s@%s@g.us", GetPhoneNumber(), MessageToGroupID(message)))) && strings.HasPrefix(strings.Split(strings.ToLower(message.Text), " ")[0], strings.ToLower(commands[i].prefix)) {
+		if (len(commands[i].groups) == 0 || arrayContains(commands[i].groups, GetGroupName(message.Info.RemoteJid))) && strings.HasPrefix(strings.Split(strings.ToLower(message.Text), " ")[0], strings.ToLower(commands[i].prefix)) {
 			go commands[i].function(message)
 			break
 		}
