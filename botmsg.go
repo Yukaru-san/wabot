@@ -2,7 +2,6 @@ package wabot
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -27,7 +26,7 @@ var defaultTextHandleFunction func(whatsapp.TextMessage)
 // handleBotMsg checks if a message is a command and executes the first possible command
 func handleBotMsg(message whatsapp.TextMessage) {
 
-	fmt.Printf("Received: %s\n - from Group:%s\n", message.Text, fmt.Sprintf("%s-%s", GetPhoneNumber(), MessageToGroupID(message)))
+	//	fmt.Printf("Received: %s\n - from Group:%s\n", message.Text, fmt.Sprintf("%s-%s", GetPhoneNumber(), MessageToGroupID(message)))
 
 	// Run through command list and execute if possible
 	for i := 0; i < len(commands); i++ {

@@ -28,10 +28,9 @@ func MessageToName(message whatsapp.TextMessage) string {
 	// Try to find the right name
 	participantNumber := strings.Split(MessageToJid(message), "@")[0]
 	userNickname := GetUserNickname(MessageToJid(message))
-
 	authorName := JidToName(message.Info.RemoteJid)
 
-	fmt.Printf("---------\nNumber: %s\nNickname: %s\nAuthor: %s\n", participantNumber, userNickname, authorName)
+	//	fmt.Printf("---------\nNumber: %s\nNickname: %s\nAuthor: %s\n", participantNumber, userNickname, authorName)
 
 	// Return if desired
 	if useNicknames && len(userNickname) > 0 {
