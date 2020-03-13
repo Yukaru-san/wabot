@@ -11,9 +11,15 @@ import (
 
 type messageHandler struct{}
 
+/*
+
+	TODO Use custom Handlers from custom Bots
+
+*/
+
 // Mainly caused by another instance of Whatsapp Web being opened
 func (messageHandler) HandleError(err error) {
-	if errorTimeout == -1 {
+	if errorTimeout == -1 && !strings.Contains(err.Error(), "error processing data") {
 		fmt.Printf("Exit due to connection break. Error:%s\n", err.Error())
 		os.Exit(0)
 	}
