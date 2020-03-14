@@ -71,7 +71,7 @@ func GetPhoneNumber() string {
 	return strings.Split(conn.Info.Wid, "@")[0]
 }
 
-// JidToGroupName returns a group's name according to the jid
+// JidToGroupName returns a chat's name according to the jid (can also check groups)
 func JidToGroupName(jid string) string {
 
 	// If only a group's jid was given
@@ -81,6 +81,17 @@ func JidToGroupName(jid string) string {
 
 	// Return the right name
 	return JidToName(jid)
+}
+
+// JidToGroupID returns a group's id according to the jid
+func JidToGroupID(jid string) string {
+
+	// If only a group's jid was given
+	if !strings.Contains(jid, "-") {
+		return jid
+	}
+
+	return strings.Split(jid, "-")[1]
 }
 
 // ----------------------------------------------------------------------------------------------------- //

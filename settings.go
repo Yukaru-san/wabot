@@ -9,14 +9,6 @@ import (
 
 type cmd struct{}
 
-/*
-	TODO
-
-	Access to User Handle
-	Allow Adding more stuff
-
-*/
-
 var (
 	consoleWriteTo = ""
 
@@ -101,7 +93,15 @@ func AddTextCommand(cmd string, functionToExecute func(whatsapp.TextMessage)) {
 
 // AddGroupCommand adds a command that only works on certain groups
 func AddGroupCommand(cmd string, groupsToWorkIn []string, functionToExecute func(whatsapp.TextMessage)) {
-	commands = append(commands, Command{prefix: cmd, groups: groupsToWorkIn, function: functionToExecute})
+
+	groupIDList := []string{}
+
+	for _, g := range groupsToWorkIn {
+		fmt.Println("g:", g, "NameToJid:", JidToGroupID(NameToJid(g)))
+		groupIDList = append(groupIDList, JidToGroupID(NameToJid(g)))
+	}
+
+	commands = append(commands, Command{prefix: cmd, groups: groupIDList, function: functionToExecute})
 }
 
 // SetImageHandler calls the given function when receiving an img
@@ -124,9 +124,8 @@ func DisplayTextMessagesInConsole(display bool) {
 	showTextMessages = display
 }
 
-// HandleError prints potential errors
+// HandleError prints potential errors (unused)
 func (cmd) HandleError(err error) {
-	fmt.Println(err.Error())
 }
 
 // HandleContactList fills the contacList on load
