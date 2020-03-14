@@ -31,8 +31,14 @@ func (messageHandler) HandleError(err error) {
 		fmt.Printf("WhatsApp crashed with the following Message:\n%s\nTrying again in: %d\n", err.Error(), errorTimeout)
 		time.Sleep(errorTimeout)
 		conn.Disconnect()
-		session, conn = handleLogin()
-		fmt.Println("--- Connected again! ---")
+		err = nil
+		session, conn, err = handleLogin()
+		if err != nil {
+			fmt.Println("--- Connected again! ---")
+		} else {
+			fmt.Println("Reconnect error: ", err.Error())
+			os.Exit(1)
+		}
 	}
 }
 

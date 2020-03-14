@@ -31,7 +31,8 @@ func handleBotMsg(message whatsapp.TextMessage) {
 	// Run through command list and execute if possible
 	for i := 0; i < len(commands); i++ {
 		// if no groups set || group is set && command is right
-		if (len(commands[i].groups) == 0 || arrayContains(commands[i].groups, JidToGroupName(message.Info.RemoteJid))) && strings.HasPrefix(strings.Split(strings.ToLower(message.Text), " ")[0], strings.ToLower(commands[i].prefix)) {
+		//		if (len(commands[i].groups) == 0 || arrayContains(commands[i].groups, JidToGroupName(message.Info.RemoteJid))) && strings.HasPrefix(strings.Split(strings.ToLower(message.Text), " ")[0], strings.ToLower(commands[i].prefix)) { // Group names
+		if (len(commands[i].groups) == 0 || arrayContains(commands[i].groups, JidToGroupID(message.Info.RemoteJid))) && strings.HasPrefix(strings.Split(strings.ToLower(message.Text), " ")[0], strings.ToLower(commands[i].prefix)) { // Group Jid
 			go commands[i].function(message)
 			break
 		}

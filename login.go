@@ -16,7 +16,7 @@ import (
 // StartBot initiates and starts the bot
 // - Takes in the name of the group to be run in
 // func StartBot(roomName string) (whatsapp.Session, *whatsapp.Conn) { TODO Only speficied groups
-func StartBot(longConnectionName, shortConnectionName string) (whatsapp.Session, *whatsapp.Conn) {
+func StartBot(longConnectionName, shortConnectionName string) (whatsapp.Session, *whatsapp.Conn, error) {
 	// Self identification
 	longConnName = longConnectionName
 	shortConnName = shortConnectionName
@@ -27,10 +27,17 @@ func StartBot(longConnectionName, shortConnectionName string) (whatsapp.Session,
 	SetDefaultTextHandleFunction(func(whatsapp.TextMessage) {})
 
 	// Login
-	session, conn = handleLogin()
+	var err error
+	session, conn, err = handleLogin()
+
+	if err != nil {
+		return whatsapp.Session{}, nil, err
+	}
 
 	// Add the command handler
 	conn.AddHandler(cmd{})
+	// Time for the handler to get ready
+	time.Sleep(time.Second)
 
 	// Saves in intervals
 	go (func() {
@@ -45,12 +52,12 @@ func StartBot(longConnectionName, shortConnectionName string) (whatsapp.Session,
 		conn.AddHandler(messageHandler{})
 	})()
 
-	return session, conn
+	return session, conn, nil
 }
 
 // handleLogin returns a connection and session-pointer.
 // If there is an error, the program will exit
-func handleLogin() (whatsapp.Session, *whatsapp.Conn) {
+func handleLogin() (whatsapp.Session, *whatsapp.Conn, error) {
 	// Try to load a stored session for quick connection
 	savedSession := whatsapp.Session{}
 	savedData, err := ioutil.ReadFile(sessionFile)
@@ -64,8 +71,7 @@ func handleLogin() (whatsapp.Session, *whatsapp.Conn) {
 		// Requests token with a 20s timeout
 		wac, err := whatsapp.NewConn(whatsappTimeout, longConnName, shortConnName)
 		if err != nil {
-			fmt.Println("An error occured:", err.Error())
-			os.Exit(1)
+			return whatsapp.Session{}, nil, err
 		}
 
 		qrChan := make(chan string)
@@ -74,7 +80,6 @@ func handleLogin() (whatsapp.Session, *whatsapp.Conn) {
 			fmt.Println("No stored session found. Please login using the generated QR code!")
 			if err := qrcode.WriteFile(<-qrChan, qrcode.Medium, 256, qrCodeFile); err != nil {
 				fmt.Println("Error saving qr code!", err.Error())
-				os.Exit(1)
 			} else {
 				//Try to open the image. Makes it easier to scan
 				displayQRcode(scanChan, qrCodeFile)
@@ -84,8 +89,7 @@ func handleLogin() (whatsapp.Session, *whatsapp.Conn) {
 		// Log into your session
 		sess, err := wac.Login(qrChan)
 		if err != nil {
-			println("Timeout! Exiting...")
-			os.Exit(0)
+			return whatsapp.Session{}, nil, err
 		}
 		// Save new session to quickly start the next time
 		sessionJSON, _ := json.Marshal(sess)
@@ -93,7 +97,7 @@ func handleLogin() (whatsapp.Session, *whatsapp.Conn) {
 		ioutil.WriteFile(sessionFile, sessionJSON, 0600)
 		fmt.Println("Session saved. No QR-Code needed during the next login!")
 		scanChan <- true
-		return sess, wac
+		return sess, wac, nil
 	}
 
 	// Session loaded successfully. Use it to login
@@ -101,11 +105,10 @@ func handleLogin() (whatsapp.Session, *whatsapp.Conn) {
 	sess, err := wac.RestoreWithSession(savedSession)
 
 	if err != nil {
-		fmt.Printf("Error connecting to WhatsApp:\n%s\n", err.Error())
-		os.Exit(0)
+		return whatsapp.Session{}, nil, err
 	}
 
-	return sess, wac
+	return sess, wac, nil
 }
 
 func displayQRcode(ch chan bool, image string) {

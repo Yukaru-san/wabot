@@ -116,3 +116,10 @@ func NameToJid(name string) string {
 
 	return "{undefined}"
 }
+
+// PrintContacList is used for debugging
+func PrintContacList() {
+	for _, c := range contacList {
+		fmt.Println(c)
+	}
+}

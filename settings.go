@@ -1,6 +1,7 @@
 package wabot
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/Yukaru-san/go-whatsapp"
@@ -92,17 +93,17 @@ func AddTextCommand(cmd string, functionToExecute func(whatsapp.TextMessage)) {
 
 // AddGroupCommand adds a command that only works on certain groups
 func AddGroupCommand(cmd string, groupsToWorkIn []string, functionToExecute func(whatsapp.TextMessage)) {
-	/*
-		groupIDList := []string{}
 
-		for _, g := range groupsToWorkIn {
-			fmt.Println("g:", g, "NameToJid:", JidToGroupID(NameToJid(g)))
-			groupIDList = append(groupIDList, JidToGroupID(NameToJid(g)))
-		}
+	groupIDList := []string{}
 
-		commands = append(commands, Command{prefix: cmd, groups: groupIDList, function: functionToExecute})
-	*/
-	commands = append(commands, Command{prefix: cmd, groups: groupsToWorkIn, function: functionToExecute})
+	for _, g := range groupsToWorkIn {
+		fmt.Println("g:", g, "NameToJid:", JidToGroupID(NameToJid(g)))
+		groupIDList = append(groupIDList, JidToGroupID(NameToJid(g)))
+	}
+
+	commands = append(commands, Command{prefix: cmd, groups: groupIDList, function: functionToExecute})
+
+	//	commands = append(commands, Command{prefix: cmd, groups: groupsToWorkIn, function: functionToExecute})
 }
 
 // SetImageHandler calls the given function when receiving an img
