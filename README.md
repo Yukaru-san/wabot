@@ -96,10 +96,17 @@ Since the savable data is fully modular, at least the savedata-loading couldn't 
 # Functions
 
 ```go
-StartBot(string)                           // Initializes and starts the bot
+SetSessionFilePath(string)		   // Directory to save session files in
+SetUsersFilePath(string)		   // Directory to save users in
+SetQRFilePath(string)			   // Directory to save qr codes in
+SetErrorTimeout(time)		   	   // Timeout to reconnect on error
+SetNicknameUseage(bool, msgText)	   // Allows users to chose nicknames
+
+StartBot(string, string)                   // Initializes and starts the bot
 DisplayTextMessagesInConsole(bool)         // Toggle printing new messages on / off
 
-AddCommand(string, func())                 // If a message starts with the given string it executes the func
+AddTextCommand(string, func())             // If a message starts with the given string it executes the func
+AddGroupCommand(string, string, func())    // Like above, but only works in given group
 SetDefaultTextHandleFunction(func())	   // Calls the given function if no command could be parsed
 SetImageHandler(func())                    // Executes the given function when receiving a image  
 SetStickerHandler(func())                  // Executes the given function when receiving a sticker  
