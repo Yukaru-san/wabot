@@ -28,8 +28,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Yukaru-san/go-whatsapp"
 	wabot "github.com/Yukaru-san/WhatsApp-GroupBot"
+	"github.com/Yukaru-san/go-whatsapp"
 )
 
 // Settings are saved personally for each user
@@ -40,7 +40,7 @@ type Settings struct {
 func main() {
 
 	// Initialize Bot
-	wabot.StartBot("My Whatsapp Bot")
+	wabot.StartBot("My Whatsapp Bot", "bot")
 
 	// Set a custom auto-save interval
 	wabot.SetAutosaveInterval(time.Minute)
@@ -50,7 +50,7 @@ func main() {
 
 	// Setting a default Settings can prevent many errors
 	wabot.CreateNewSettingsOption(Settings{
-		0, // CommandCounter 
+		0, // CommandCounter
 	})
 
 	// Try to load savedata and convert it into your own structure
@@ -68,7 +68,7 @@ func main() {
 	}
 
 	// Add and handle commands however you like!
-	wabot.AddCommand("/cmd", func(message whatsapp.TextMessage) {
+	wabot.AddTextCommand("/cmd", func(message whatsapp.TextMessage) {
 		// Get the current settings from the user who sent the message
 		settings := wabot.GetUserSettings(wabot.MessageToJid(message)).(Settings)
 
