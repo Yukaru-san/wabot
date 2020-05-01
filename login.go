@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"time"
 
@@ -78,6 +79,8 @@ func handleLogin() (whatsapp.Session, *whatsapp.Conn, error) {
 		scanChan := make(chan bool, 1)
 		go func() {
 			fmt.Println("No stored session found. Please login using the generated QR code!")
+			targetDir, _ := filepath.Split(qrCodeFile)
+			os.MkdirAll(targetDir, 0700)
 			if err := qrcode.WriteFile(<-qrChan, qrcode.Medium, 256, qrCodeFile); err != nil {
 				fmt.Println("Error saving qr code!", err.Error())
 			} else {
