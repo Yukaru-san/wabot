@@ -48,7 +48,7 @@ func main() {
 	// There is a default key, but you can change it
 	wabot.SetEncryptionKey([]byte("VmDTJUQrYxTztMDB"))
 
-	// Setting a default Settings can prevent many errors
+	// Using default Settings can prevent errors
 	wabot.CreateNewSettingsOption(Settings{
 		0, // CommandCounter
 	})
@@ -100,7 +100,7 @@ SetSessionFilePath(string)		   // Directory to save session files in
 SetUsersFilePath(string)		   // Directory to save users in
 SetQRFilePath(string)			   // Directory to save qr codes in
 SetErrorTimeout(time)		   	   // Timeout to reconnect on error
-SetNicknameUseage(bool, msgText)	   // Allows users to chose nicknames
+SetNicknameUseage(bool, msgText)	   // Allows users to choose nicknames
 
 StartBot(string, string)                   // Initializes and starts the bot
 DisplayTextMessagesInConsole(bool)         // Toggle printing new messages on / off
@@ -108,7 +108,7 @@ DisplayTextMessagesInConsole(bool)         // Toggle printing new messages on / 
 AddTextCommand(string, func())             // If a message starts with the given string it executes the func
 AddGroupCommand(string, string, func())    // Like above, but only works in given group
 SetDefaultTextHandleFunction(func())	   // Calls the given function if no command could be parsed
-SetImageHandler(func())                    // Executes the given function when receiving a image  
+SetImageHandler(func())                    // Executes the given function when receiving an image  
 SetStickerHandler(func())                  // Executes the given function when receiving a sticker  
 
 WriteTextMessage(string, string)           // Writes a WhatsApp messsage to the defined Jid's owner
@@ -117,7 +117,7 @@ SendStickerMessage(*os.File, string)       // Sends the given sticker. Needs to 
 
 SetEncryptionKey([]byte)                   // Set a 16 Byte key to encrypt your saved data
 
-MessageToJid(whatsapp.TextMessage)         // Returns the unique ID of the message sender
+MessageToJid(whatsapp.TextMessage)         // Returns the unique ID of the message's sender
 MessageToName(whatsapp.TextMessage)        // Returns the sender's name
 JidToName(string)                          // Returns the name of the ID's owner
 NameToJid(string)                          // Returns the corresponding Jid of the user's name
@@ -127,13 +127,13 @@ SetAutoSaveInterval(time.Duration)         // Save after every passed interval
 SetErrorTimeout(time.Duration)             // Time until the program will restart after losing connection
 
 CreateNewSettingsOption(interface)         // Standard Settings for newly added users
-IsUserRegistered(string) bool              // Checks if the Jid is registered already
-AddUserByJid(string)                       // Registers the jid's owner - if not already registered
+IsUserRegistered(string) bool              // Checks if the Jid is already registered 
+AddUserByJid(string)                       // Registers the Jid's owner - if not already registered
 ChangeUserSettings(string, interface)      // Updates the user's settings with the given struct
 GetUserSettings(string) interface          // Returns the Jid-corresponding Settings
 GetUserIndex(whatsapp.TextMessage) int     // Returns the message-owner's position in the user-slice
 
-SaveUsersToDisk() bool                     // Returns true on successful saving
+SaveUsersToDisk() bool                     // Returns true on successfully saving the userlist
 GetSaveData() (BotUserList, bool)          // Returns the loaded savedata and true if possible (false otherwise)
 UseSaveData(BotUserList)                   // Overwrites the userlist with the given one
 ```
