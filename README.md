@@ -140,4 +140,4 @@ UseSaveData(BotUserList)                   // Overwrites the userlist with the g
 *ChangeUserSettings* and *GetUserSettings* both call *AddUserByJid* if needed. You don't need to check yourself!
 
 # Developement notice
-While this project already reached a state in which you can use it to acomplish mostly every project you might have, it is still under developement. If you happen to see any crashes, errors or if you have ideas on how it can be improved, just create an issue and i will look into it!
+While this project already reached a state in which you can use it to acomplish mostly every project you might have, it is still under development. If you happen to see any crashes, errors or if you have ideas on how it can be improved, just create an issue and i will look into it!
