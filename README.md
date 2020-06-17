@@ -19,7 +19,7 @@ go get github.com/Yukaru-san/WhatsApp-GroupBot
 ```
 
 # Usage
-Using this bot should be pretty easy as soon as you know what you want to accomplish. Here is an example of a working program:
+Using this bot should be pretty easy as soon as you know what you want to accomplish. Here is an example of a working program that will count the amount of times the command "/cmd" is used:
 ```go
 package main
 
