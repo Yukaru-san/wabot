@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"github.com/Yukaru-san/go-whatsapp"
+	"github.com/Rhymen/go-whatsapp"
 )
 
 var users = BotUserList{}

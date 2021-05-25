@@ -10,7 +10,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/Yukaru-san/go-whatsapp"
+	"github.com/Rhymen/go-whatsapp"
 	"github.com/skip2/go-qrcode"
 )
 
@@ -67,10 +67,17 @@ func handleLogin() (whatsapp.Session, *whatsapp.Conn, error) {
 		err = json.Unmarshal(savedData, &savedSession)
 	}
 
+	// Whatsapp Session Options
+	connOptions := whatsapp.Options{
+		Timeout:         whatsappTimeout,
+		LongClientName:  longConnName,
+		ShortClientName: shortConnName,
+	}
+
 	// If there is no session stored
 	if err != nil {
 		// Requests token with a 20s timeout
-		wac, err := whatsapp.NewConn(whatsappTimeout, longConnName, shortConnName)
+		wac, err := whatsapp.NewConnWithOptions(&connOptions)
 		if err != nil {
 			return whatsapp.Session{}, nil, err
 		}
@@ -104,7 +111,7 @@ func handleLogin() (whatsapp.Session, *whatsapp.Conn, error) {
 	}
 
 	// Session loaded successfully. Use it to login
-	wac, err := whatsapp.NewConn(whatsappTimeout, longConnName, shortConnName)
+	wac, err := whatsapp.NewConnWithOptions(&connOptions)
 	sess, err := wac.RestoreWithSession(savedSession)
 
 	if err != nil {

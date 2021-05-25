@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Yukaru-san/go-whatsapp"
+	"github.com/Rhymen/go-whatsapp"
 )
 
 // MessageToJid find the right Jid in a message

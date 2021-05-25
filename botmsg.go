@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Yukaru-san/go-whatsapp"
+	"github.com/Rhymen/go-whatsapp"
 )
 
 // Command struct

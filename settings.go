@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Yukaru-san/go-whatsapp"
+	"github.com/Rhymen/go-whatsapp"
 )
 
 type cmd struct{}

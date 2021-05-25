@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Yukaru-san/go-whatsapp"
+	"github.com/Rhymen/go-whatsapp"
 )
 
 type messageHandler struct{}
