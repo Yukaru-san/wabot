@@ -13,10 +13,7 @@ other instance. Obviously, commands during this time-out won't have any effect a
 If you wish to do so, just set the ErrorTimeout to something like 100
 
 # Installation
-The bot depends on Rhymen's WhatsApp API but since I forked his original work to add more features, you will need to install these two libraries:
-```go
-go get github.com/Yukaru-san/go-whatsapp
-```
+Simply use:
 ```go
 go get github.com/Yukaru-san/WhatsApp-GroupBot
 ```
