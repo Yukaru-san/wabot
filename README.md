@@ -10,7 +10,7 @@ The bot will reconnect after a given amount of time (defined in *SetErrorTimeout
 other instance. Obviously, commands during this time-out won't have any effect and sadly, the only way around it, is completly denying another instance of WhatsApp Web being opened.                                                                       
 If you wish to do so, just set the ErrorTimeout to something like 100
 <br><br>
-I published a stripped-down version [one of my private bots](https://github.com/Yukaru-san/WhatsApp-GroupBot-Example)  so you can get some inspiration.
+I also published [one of my private bots](https://github.com/Yukaru-san/WhatsApp-GroupBot-Example) so you can get some inspiration.
 
 # Installation
 Simply use:
