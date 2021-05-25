@@ -9,6 +9,8 @@ Since there can be only one instance of WhatsApp Web at a time, the bot will pau
 The bot will reconnect after a given amount of time (defined in *SetErrorTimeout()*) and therefore kick you out of your
 other instance. Obviously, commands during this time-out won't have any effect and sadly, the only way around it, is completly denying another instance of WhatsApp Web being opened.                                                                       
 If you wish to do so, just set the ErrorTimeout to something like 100
+<br><br>
+I published a stripped-down version [one of my private bots](https://github.com/Yukaru-san/WhatsApp-GroupBot-Example)  so you can get some inspiration.
 
 # Installation
 Simply use:
@@ -90,8 +92,6 @@ func main() {
 
 ```
 Since the savable data is fully modular, at least the savedata-loading couldn't be included within the library. Therefore it has to be done inside of your own code. As long as you keep the name "Settings" you can use this exact loading part for more-or-less any other project. Also, for any aditional information regarding the struct "whatsapp.TextMessage" refer to [Rhymen's Github page](https://github.com/Rhymen/go-whatsapp) - it is quite self-explanatory though. A message's text is stored in ***message.Text***
-<br><br>
-Also I published [one of my private bots](https://github.com/Yukaru-san/WhatsApp-GroupBot-Example)  so you can get some inspiration.
 
 # Functions
 
