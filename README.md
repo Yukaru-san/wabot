@@ -29,7 +29,7 @@ import (
 	"time"
 
 	wabot "github.com/Yukaru-san/WhatsApp-GroupBot"
-	"github.com/Yukaru-san/go-whatsapp"
+	"github.com/Rhymen/go-whatsapp"
 )
 
 // Settings are saved personally for each user
