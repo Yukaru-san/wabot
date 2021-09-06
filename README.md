@@ -1,7 +1,5 @@
 # WhatsApp-GroupBot
 
-<b>Notice:</b> Currently out of date. If someone's interested I might take a look into it again.
-
 By emulating WhatsApp Web this library allows you to easiely set up and use this highly customizable WhatsApp bot.  
 Since customizability is the main focus of this project, you can create as many interactions as you want.
 There is also a feature to save specific informations (like settings) across users within the group.
@@ -11,12 +9,11 @@ Since there can be only one instance of WhatsApp Web at a time, the bot will pau
 The bot will reconnect after a given amount of time (defined in *SetErrorTimeout()*) and therefore kick you out of your
 other instance. Obviously, commands during this time-out won't have any effect and sadly, the only way around it, is completly denying another instance of WhatsApp Web being opened.                                                                       
 If you wish to do so, just set the ErrorTimeout to something like 100
+<br><br>
+I also published [one of my private bots](https://github.com/Yukaru-san/WhatsApp-GroupBot-Example) so you can get some inspiration.
 
 # Installation
-The bot depends on Rhymen's WhatsApp API but since I forked his original work to add more features, you will need to install these two libraries:
-```go
-go get github.com/Yukaru-san/go-whatsapp
-```
+Simply use:
 ```go
 go get github.com/Yukaru-san/WhatsApp-GroupBot
 ```
@@ -32,7 +29,7 @@ import (
 	"time"
 
 	wabot "github.com/Yukaru-san/WhatsApp-GroupBot"
-	"github.com/Yukaru-san/go-whatsapp"
+	"github.com/Rhymen/go-whatsapp"
 )
 
 // Settings are saved personally for each user
@@ -141,6 +138,3 @@ GetSaveData() (BotUserList, bool)          // Returns the loaded savedata and tr
 UseSaveData(BotUserList)                   // Overwrites the userlist with the given one
 ```
 *ChangeUserSettings* and *GetUserSettings* both call *AddUserByJid* if needed. You don't need to check yourself!
-
-# Developement notice
-While this project already reached a state in which you can use it to acomplish mostly every project you might have, it is still under development. If you happen to see any crashes, errors or if you have ideas on how it can be improved, just create an issue and i will look into it!
