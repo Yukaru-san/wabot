@@ -78,6 +78,7 @@ func handleLogin() (whatsapp.Session, *whatsapp.Conn, error) {
 	if err != nil {
 		// Requests token with a 20s timeout
 		wac, err := whatsapp.NewConnWithOptions(&connOptions)
+		wac.SetClientVersion(2, 2123, 7)
 		if err != nil {
 			return whatsapp.Session{}, nil, err
 		}
@@ -112,6 +113,7 @@ func handleLogin() (whatsapp.Session, *whatsapp.Conn, error) {
 
 	// Session loaded successfully. Use it to login
 	wac, err := whatsapp.NewConnWithOptions(&connOptions)
+	wac.SetClientVersion(2, 2123, 7)
 	sess, err := wac.RestoreWithSession(savedSession)
 
 	if err != nil {
