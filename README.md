@@ -1,4 +1,6 @@
-# WhatsApp-GroupBot
+# WhatsApp-GroupBot (OUTDATED)
+
+<b>With the release of WhatsApp's multi-device support this program stopped working. I may try to update it somewhere in the future!</b>
 
 By emulating WhatsApp Web this library allows you to easiely set up and use this highly customizable WhatsApp bot.  
 Since customizability is the main focus of this project, you can create as many interactions as you want.
